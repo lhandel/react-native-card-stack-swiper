@@ -18,7 +18,7 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
     <Card style={[styles.card, styles.card1]}><Text style={styles.label}>C</Text></Card>
   </CardStack>
 ```
-#CardStack
+# CardStack
 
 ## CardStack props
 | Props               | type          | description                     | required      | default       |
