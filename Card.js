@@ -4,7 +4,7 @@ import {
   View,
 } from 'react-native';
 
-export default const Card = ({ style, children }) => (
+const Card = ({ style, children }) => (
   <View style={style} >
     {children}
   </View>);
@@ -26,3 +26,5 @@ Card.defaultProps = {
   onSwipedTop: () => {},
   onSwipedBottom: () => {},
 }
+
+export default Card;
