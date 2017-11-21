@@ -13,6 +13,7 @@ const { height, width } = Dimensions.get('window');
 
 export default class CardStack extends Component {
 
+
   static distance(x, y) {
     const a = Math.abs(x);
     const b = Math.abs(y);
@@ -39,16 +40,17 @@ export default class CardStack extends Component {
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => (parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => (parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
       onPanResponderGrant: (evt, gestureState) => {
         this.setState({ touchStart: new Date().getTime() });
       },
       onPanResponderMove: (evt, gestureState) => {
-        const dragDistance = this.distance(gestureState.dx, gestureState.dy );
+        const { verticalSwipe, horizontalSwipe } = this.props;
+        const dragDistance = this.distance((horizontalSwipe) ? gestureState.dx : 0, (verticalSwipe) ? gestureState.dy : 0 );
         this.state.dragDistance.setValue(dragDistance);
-        this.state.drag.setValue({x: gestureState.dx, y: gestureState.dy});
+        this.state.drag.setValue({x: (horizontalSwipe) ? gestureState.dx : 0, y: (verticalSwipe) ? gestureState.dy : 0});
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
@@ -65,9 +67,10 @@ export default class CardStack extends Component {
               } = this.props;
 
 
-        if ((Math.abs(gestureState.dy) > verticalThreshold)  ||
+        if (((Math.abs(gestureState.dy) > verticalThreshold)  ||
             ( Math.abs(gestureState.dy) > verticalThreshold*0.8 &&
-              swipeDuration < 150))
+              swipeDuration < 150)
+            ) && this.props.verticalSwipe)
         {
 
           const swipeDirection = (gestureState.dy < 0) ? height * -1 : height;
@@ -85,7 +88,10 @@ export default class CardStack extends Component {
           {
             this._resetCard();
           }
-        }else if ((Math.abs(gestureState.dx) > horizontalThreshold) || (Math.abs(gestureState.dx) > horizontalThreshold*0.6 && swipeDuration < 150)) {
+        }else if (((Math.abs(gestureState.dx) > horizontalThreshold) ||
+                  (Math.abs(gestureState.dx) > horizontalThreshold*0.6 &&
+                  swipeDuration < 150)
+                ) && this.props.horizontalSwipe) {
 
           const swipeDirection = (gestureState.dx < 0) ? width * -1 : width;
           if (swipeDirection < 0 && !disableLeftSwipe)
@@ -253,6 +259,7 @@ export default class CardStack extends Component {
   }
 
   _nextCard(direction, x, y, duration=400){
+    const { verticalSwipe, horizontalSwipe } = this.props;
     const { sindex, cards, topCard } = this.state;
 
     switch (direction) {
@@ -285,7 +292,7 @@ export default class CardStack extends Component {
     Animated.timing(
       this.state.drag,
       {
-        toValue: { x, y },
+        toValue: { x: (horizontalSwipe) ? x : 0, y: (verticalSwipe) ? y : 0 },
         duration,
       }
     ).start(() => {
