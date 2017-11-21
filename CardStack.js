@@ -246,7 +246,7 @@ export default class CardStack extends Component {
     this._nextCard('top', 0, -height, duration);
   }
 
-  swipedBottom(){
+  swipeBottom(){
     this._nextCard('bottom', 0, height, duration);
   }
 

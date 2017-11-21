@@ -12,7 +12,7 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 ```
 
 ```javascript
-  <CardStack style={styles.content} >
+  <CardStack style={styles.content} ref={swiper => { this.swiper = swiper }}>
     <Card style={[styles.card, styles.card1]}><Text style={styles.label}>A</Text></Card>
     <Card style={[styles.card, styles.card2]}><Text style={styles.label}>B</Text></Card>
     <Card style={[styles.card, styles.card1]}><Text style={styles.label}>C</Text></Card>
@@ -47,6 +47,30 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 | onSwipedRight     | func           | function to be called when a card is swiped right. it receives the swiped card index   |
 | onSwipedTop       | func           | function to be called when a card is swiped top. it receives the swiped card index  |
 | onSwipedBottom    | func           | function to be called when a card is swiped bottom. it receives the swiped card index |
+
+
+## CardStack actions
+| Props             | type          |
+| ----------------- | ------------- |
+| swipeLeft         | func          |
+| swipeRight        | func          |
+| swipeBottom       | func          |
+| swipeTop          | func          |
+| goBackFromLeft    | func          |
+| goBackFromRight   | func          |
+| goBackFromBottom  | func          |
+| goBackFromTop     | func          |
+
+```javascript
+  <CardStack style={styles.content} ref={swiper => { this.swiper = swiper }}>
+    <Card style={[styles.card, styles.card1]}><Text style={styles.label}>A</Text></Card>
+    <Card style={[styles.card, styles.card2]}><Text style={styles.label}>B</Text></Card>
+  </CardStack>
+
+  <TouchableOpacity onPress={ () => { this.swiper.swipeLeft() }}>
+    <Text>Left</Text>
+  </TouchableOpacity>
+```
 
 
 # Card
