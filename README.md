@@ -7,6 +7,12 @@ Tinder like react-native card stack swiper
 ![App preview](/animation.gif)
 ![App preview2](/animation2.gif)
 
+## Installation
+
+```
+  npm install --save react-native-card-stack-swiper
+```
+
 ```javascript
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 ```
@@ -18,6 +24,7 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
     <Card style={[styles.card, styles.card1]}><Text style={styles.label}>C</Text></Card>
   </CardStack>
 ```
+
 # CardStack
 
 ## CardStack props

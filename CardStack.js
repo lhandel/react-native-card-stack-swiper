@@ -425,7 +425,7 @@ CardStack.defaultProps = {
   disableTopSwipe: true,
   verticalSwipe: true,
   verticalThreshold: height/4,
-  orizontalSwipe: true,
+  horizontalSwipe: true,
   horizontalThreshold: width/2,
   outputRotationRange: ['-15deg','0deg','15deg'],
 

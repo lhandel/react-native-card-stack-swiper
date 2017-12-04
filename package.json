@@ -1,6 +1,6 @@
 {
   "name": "react-native-card-stack-swiper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tinder like react-native card stack swiper",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "react-native-component"
   ],
   "author": "Ludwig Handel",
-  "license": "ISC",
+  "license": "MIT",
   "peerDependencies": {
     "react": "^16.0.0-beta.5",
     "react-native": "^0.49.1"
