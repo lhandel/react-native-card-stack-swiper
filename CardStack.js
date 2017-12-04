@@ -419,10 +419,10 @@ CardStack.defaultProps = {
     console.log('onSwipedAll')
   },
 
-  disableBottomSwipe: true,
-  disableLeftSwipe: true,
-  disableRightSwipe: true,
-  disableTopSwipe: true,
+  disableBottomSwipe: flase,
+  disableLeftSwipe: false,
+  disableRightSwipe: false,
+  disableTopSwipe: false,
   verticalSwipe: true,
   verticalThreshold: height/4,
   horizontalSwipe: true,
