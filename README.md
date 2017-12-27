@@ -4,16 +4,16 @@ Tinder like react-native card stack swiper
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/react-native-card-stack-swiper/issues)
 [![npm version](https://badge.fury.io/js/react-native-card-stack-swiper.svg)](https://badge.fury.io/js/react-native-card-stack-swiper)
 
-## Preview
-
-![App preview](/animation.gif)
-![App preview2](/animation2.gif)
-
 ## Installation
 
 ```
   npm install --save react-native-card-stack-swiper
 ```
+
+## Preview
+
+![App preview](/animation.gif)
+![App preview2](/animation2.gif)
 
 ```javascript
 import CardStack, { Card } from 'react-native-card-stack-swiper';
