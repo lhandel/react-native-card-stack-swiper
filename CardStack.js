@@ -6,7 +6,8 @@ import {
   Animated,
   PanResponder,
   Dimensions,
-  Text
+  Text,
+  Platform
 } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
@@ -345,7 +346,14 @@ export default class CardStack extends Component {
         <View {...this._panResponder.panHandlers} style={[{position:'relative'},this.props.style]}>
           <Animated.View style={{
                 position: 'absolute',
-                zIndex: (topCard === 'cardB') ? 3 : 2,
+                ...Platform.select({
+                  ios: {
+                    zIndex: (topCard === 'cardB') ? 3 : 2,
+                  },
+                  android: {
+                    elevation: (topCard === 'cardB') ? 3 : 2,
+                  }
+                }),
                 transform: [
                   { rotate: (topCard === 'cardB') ? rotate: '0deg' },
                   {translateX: (topCard === 'cardB') ? drag.x: 0},
@@ -357,7 +365,14 @@ export default class CardStack extends Component {
           </Animated.View>
           <Animated.View style={{
                 position: 'absolute',
-                zIndex: (topCard === 'cardA') ? 3 : 2,
+                ...Platform.select({
+                  ios: {
+                    zIndex: (topCard === 'cardA') ? 3 : 2,
+                  },
+                  android: {
+                    elevation: (topCard === 'cardA') ? 3 : 2,
+                  }
+                }),
                 transform: [
                   { rotate: (topCard === 'cardA') ? rotate: '0deg' },
                   {translateX: (topCard === 'cardA') ? drag.x: 0},
