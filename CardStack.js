@@ -136,11 +136,13 @@ export default class CardStack extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({
+    if (nextProps.children !== this.props.children) {
+      this.setState({
       cards: nextProps.children,
       cardA: nextProps.children[0],
       cardB: nextProps.children[1],
     });
+    }
   }
 
   _resetCard(){
