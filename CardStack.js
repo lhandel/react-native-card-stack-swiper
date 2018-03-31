@@ -77,12 +77,10 @@ export default class CardStack extends Component {
           const swipeDirection = (gestureState.dy < 0) ? height * -1 : height;
           if(swipeDirection < 0 && !disableTopSwipe)
           {
-            this.props.onSwipedTop(sindex);
             this._nextCard('top', gestureState.dx, swipeDirection, 200);
           }
           else if (!disableBottomSwipe)
           {
-            this.props.onSwipedBottom(sindex);
             this._nextCard('bottom', gestureState.dx, swipeDirection, 200);
           }
           else
@@ -101,7 +99,6 @@ export default class CardStack extends Component {
           }
           else if(!disableRightSwipe)
           {
-            this.props.onSwipedRight(sindex);
             this._nextCard('right', swipeDirection, gestureState.dy, 200);
           }
           else
@@ -266,28 +263,27 @@ export default class CardStack extends Component {
   _nextCard(direction, x, y, duration=400){
     const { verticalSwipe, horizontalSwipe } = this.props;
     const { sindex, cards, topCard } = this.state;
-
-    if((sindex-2) < cards.length){
+    const index = sindex-2 
+    if((index) < cards.length){
 
       switch (direction) {
         case 'left':
-          this.props.onSwipedLeft();
-          this.state.cards[sindex-2].props.onSwipedLeft();
+          this.props.onSwipedLeft(index);
+          this.state.cards[index].props.onSwipedLeft();
           break;
         case 'right':
-          this.props.onSwipedRight();
-          this.state.cards[sindex-2].props.onSwipedRight();
+          this.props.onSwipedRight(index);
+          this.state.cards[index].props.onSwipedRight();
           break;
         case 'top':
-          this.props.onSwipedTop();
-          this.state.cards[sindex-2].props.onSwipedTop();
+          this.props.onSwipedTop(index);
+          this.state.cards[index].props.onSwipedTop();
           break;
         case 'bottom':
-          this.props.onSwipedBottom();
-          this.state.cards[sindex-2].props.onSwipedBottom();
+          this.props.onSwipedBottom(index);
+          this.state.cards[index].props.onSwipedBottom();
           break;
         default:
-
       }
       Animated.spring(
         this.state.dragDistance,
