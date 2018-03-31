@@ -265,26 +265,6 @@ export default class CardStack extends Component {
     const { sindex, cards, topCard } = this.state;
     const index = sindex-2 
     if((index) < cards.length){
-
-      switch (direction) {
-        case 'left':
-          this.props.onSwipedLeft(index);
-          this.state.cards[index].props.onSwipedLeft();
-          break;
-        case 'right':
-          this.props.onSwipedRight(index);
-          this.state.cards[index].props.onSwipedRight();
-          break;
-        case 'top':
-          this.props.onSwipedTop(index);
-          this.state.cards[index].props.onSwipedTop();
-          break;
-        case 'bottom':
-          this.props.onSwipedBottom(index);
-          this.state.cards[index].props.onSwipedBottom();
-          break;
-        default:
-      }
       Animated.spring(
         this.state.dragDistance,
         {
@@ -323,6 +303,26 @@ export default class CardStack extends Component {
           topCard: newTopCard,
           sindex: (this.props.loop && (sindex+1 >= cards.length)) ? 0 : sindex+1
         });
+
+        switch (direction) {
+          case 'left':
+            this.props.onSwipedLeft(index);
+            this.state.cards[index].props.onSwipedLeft();
+            break;
+          case 'right':
+            this.props.onSwipedRight(index);
+            this.state.cards[index].props.onSwipedRight();
+            break;
+          case 'top':
+            this.props.onSwipedTop(index);
+            this.state.cards[index].props.onSwipedTop();
+            break;
+          case 'bottom':
+            this.props.onSwipedBottom(index);
+            this.state.cards[index].props.onSwipedBottom();
+            break;
+          default:
+        }
       });
 
     }
