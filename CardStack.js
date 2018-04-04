@@ -79,7 +79,7 @@ export default class CardStack extends Component {
           {
             this._nextCard('top', gestureState.dx, swipeDirection, 200);
           }
-          else if (!disableBottomSwipe)
+          else if (swipeDirection > 0 && !disableBottomSwipe)
           {
             this._nextCard('bottom', gestureState.dx, swipeDirection, 200);
           }
@@ -97,7 +97,7 @@ export default class CardStack extends Component {
           {
             this._nextCard('left', swipeDirection, gestureState.dy, 200);
           }
-          else if(!disableRightSwipe)
+          else if(swipeDirection > 0 && !disableRightSwipe)
           {
             this._nextCard('right', swipeDirection, gestureState.dy, 200);
           }
