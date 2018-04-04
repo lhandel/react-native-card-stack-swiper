@@ -42,7 +42,6 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 | disableRightSwipe   | bool          | disable right swipe             |               | false         |
 | verticalSwipe       | bool          | enable/disable vertical swiping |               | true          |
 | horizontalSwipe     | bool          | enable/disable horizont swiping |               | true          |
-| horizontalSwipe     | bool          | enable/disable horizont swiping |               | true          |
 | verticalThreshold   | bool          | vertical swipe threshold        |               | height/4      |
 | horizontalThreshold | bool          | horizontal swipe threshold      |               | width/2       |
 | outputRotationRange | array         | rotation values for the x values|               | ['-15deg', '0deg', '15deg'] |
@@ -92,8 +91,8 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 ## Card events
 | Props             | type          | description                 |
 | ----------------- | ------------- | --------------------------- |
-| onSwiped          | func          | function to be called when a card is swiped. it receives the swiped card index   |
-| onSwipedLeft      | func          | function to be called when a card is swiped left. it receives the swiped card index   |
-| onSwipedRight     | func          | function to be called when a card is swiped right. it receives the swiped card index   |
-| onSwipedTop       | func          | function to be called when a card is swiped top. it receives the swiped card index  |
-| onSwipedBottom    | func          | function to be called when a card is swiped bottom. it receives the swiped card index |
+| onSwiped          | func          | function to be called when a card is swiped.   |
+| onSwipedLeft      | func          | function to be called when a card is swiped left.  |
+| onSwipedRight     | func          | function to be called when a card is swiped right.   |
+| onSwipedTop       | func          | function to be called when a card is swiped top.  |
+| onSwipedBottom    | func          | function to be called when a card is swiped bottom. |
