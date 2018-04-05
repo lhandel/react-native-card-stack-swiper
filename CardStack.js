@@ -75,7 +75,6 @@ export default class CardStack extends Component {
         {
 
           const swipeDirection = (gestureState.dy < 0) ? height * -1 : height;
-          console.log(swipeDirection, disableTopSwipe);
           if(swipeDirection < 0 && !disableTopSwipe)
           {
 
@@ -83,7 +82,6 @@ export default class CardStack extends Component {
           }
           else if (swipeDirection > 0 && !disableBottomSwipe)
           {
-              console.log("run");
             this._nextCard('bottom', gestureState.dx, swipeDirection, 200);
           }
           else
