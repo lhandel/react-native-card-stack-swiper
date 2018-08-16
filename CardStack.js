@@ -389,7 +389,9 @@ export default class CardStack extends Component {
               }}>
               {cardB}
           </Animated.View>
-          <Animated.View style={{
+          <Animated.View
+              pointerEvents={topCard === 'cardA' ? "auto" : "none"}
+              style={{
                 position: 'absolute',
                 ...Platform.select({
                   ios: {
