@@ -372,10 +372,8 @@ export default class CardStack extends Component {
         <View {...this._panResponder.panHandlers} style={[{position:'relative'},this.props.style]}>
           <Animated.View style={{
                 position: 'absolute',
+                zIndex: (topCard === 'cardB') ? 3 : 2,
                 ...Platform.select({
-                  ios: {
-                    zIndex: (topCard === 'cardB') ? 3 : 2,
-                  },
                   android: {
                     elevation: (topCard === 'cardB') ? 3 : 2,
                   }
@@ -391,10 +389,8 @@ export default class CardStack extends Component {
           </Animated.View>
           <Animated.View style={{
                 position: 'absolute',
+                zIndex: (topCard === 'cardA') ? 3 : 2,
                 ...Platform.select({
-                  ios: {
-                    zIndex: (topCard === 'cardA') ? 3 : 2,
-                  },
                   android: {
                     elevation: (topCard === 'cardA') ? 3 : 2,
                   }
