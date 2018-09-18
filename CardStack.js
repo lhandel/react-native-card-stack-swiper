@@ -125,11 +125,17 @@ export default class CardStack extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    let aIndex = (this.state.topCard == 'cardA') ? this.state.sindex - 2 : this.state.sindex - 1;
+    let bIndex = (this.state.topCard == 'cardB') ? this.state.sindex - 2 : this.state.sindex - 1;
+
+    aIndex = aIndex < 0 ? nextProps.children.length + aIndex : aIndex;
+    bIndex = bIndex < 0 ? nextProps.children.length + bIndex : bIndex;
+
     if (nextProps.children !== this.props.children) {
       this.setState({
         cards: nextProps.children,
-        cardA: nextProps.children[(this.state.topCard=='cardA')? this.state.sindex-2 : this.state.sindex-1],
-        cardB: nextProps.children[(this.state.topCard=='cardB')? this.state.sindex-2 : this.state.sindex-1]
+        cardA: nextProps.children[aIndex],
+        cardB: nextProps.children[bIndex],
       });
     }
   }
