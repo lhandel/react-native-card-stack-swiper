@@ -40,15 +40,32 @@ export default class CardStack extends Component {
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponder: (evt, gestureState) => false,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) => (parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => (parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
+      onMoveShouldSetPanResponder: (evt, gestureState) =>  {
+        const isVerticalSwipe = Math.sqrt(
+          Math.pow(gestureState.dx, 2) < Math.pow(gestureState.dy, 2)
+        )
+        if (!this.props.verticalSwipe && isVerticalSwipe) {
+          return false
+        }
+        return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > 10
+      }, //(parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+        const isVerticalSwipe = Math.sqrt(
+          Math.pow(gestureState.dx, 2) < Math.pow(gestureState.dy, 2)
+        )
+        if (!this.props.verticalSwipe && isVerticalSwipe) {
+          return false
+        }
+        return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > 10
+      },  //(parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
       onPanResponderGrant: (evt, gestureState) => {
         this.setState({ touchStart: new Date().getTime() });
       },
       onPanResponderMove: (evt, gestureState) => {
         const { verticalSwipe, horizontalSwipe } = this.props;
+        const { verticalThreshold, horizontalThreshold } = this.props
         const dragDistance = this.distance((horizontalSwipe) ? gestureState.dx : 0, (verticalSwipe) ? gestureState.dy : 0 );
         this.state.dragDistance.setValue(dragDistance);
         this.state.drag.setValue({x: (horizontalSwipe) ? gestureState.dx : 0, y: (verticalSwipe) ? gestureState.dy : 0});
@@ -78,11 +95,11 @@ export default class CardStack extends Component {
           if(swipeDirection < 0 && !disableTopSwipe)
           {
 
-            this._nextCard('top', gestureState.dx, swipeDirection, 200);
+            this._nextCard('top', gestureState.dx, swipeDirection, this.props.duration);
           }
           else if (swipeDirection > 0 && !disableBottomSwipe)
           {
-            this._nextCard('bottom', gestureState.dx, swipeDirection, 200);
+            this._nextCard('bottom', gestureState.dx, swipeDirection, this.props.duration);
           }
           else
           {
@@ -96,11 +113,11 @@ export default class CardStack extends Component {
           const swipeDirection = (gestureState.dx < 0) ? width * -1 : width;
           if (swipeDirection < 0 && !disableLeftSwipe)
           {
-            this._nextCard('left', swipeDirection, gestureState.dy, 200);
+            this._nextCard('left', swipeDirection, gestureState.dy, this.props.duration);
           }
           else if(swipeDirection > 0 && !disableRightSwipe)
           {
-            this._nextCard('right', swipeDirection, gestureState.dy, 200);
+            this._nextCard('right', swipeDirection, gestureState.dy, this.props.duration);
           }
           else
           {
@@ -159,14 +176,14 @@ export default class CardStack extends Component {
       this.state.dragDistance,
       {
         toValue: 0,
-        duration: 200,
+        duration: this.props.duration,
       }
     ).start();
     Animated.spring(
       this.state.drag,
       {
         toValue: {x: 0, y: 0},
-        duration: 200,
+        duration: this.props.duration,
       }
     ).start();
 
@@ -244,7 +261,7 @@ export default class CardStack extends Component {
         this.state.dragDistance,
         {
           toValue: 0,
-          duration: 400,
+          duration: this.props.duration,
         }
       ).start();
 
@@ -252,7 +269,7 @@ export default class CardStack extends Component {
         this.state.drag,
         {
           toValue: {x: 0, y: 0},
-          duration: 400,
+          duration: this.props.duration,
         }
       ).start();
     })
@@ -286,7 +303,7 @@ export default class CardStack extends Component {
     // index of the swiped card
     const index = (loop) ? this.mod(nextCard-2, cards.length) : nextCard - 2;
 
-    if((sindex-2 < cards.length) || (loop) ){
+    if((sindex-2 < cards.length) || (loop) ){
       Animated.spring(
         this.state.dragDistance,
         {
@@ -442,6 +459,7 @@ CardStack.propTypes = {
   horizontalSwipe: PropTypes.bool,
   horizontalThreshold: PropTypes.number,
   outputRotationRange: PropTypes.array,
+  duration: PropTypes.number
 
 }
 
@@ -469,6 +487,7 @@ CardStack.defaultProps = {
   horizontalSwipe: true,
   horizontalThreshold: width/2,
   outputRotationRange: ['-15deg','0deg','15deg'],
+  duration: 200
 
 
 }
