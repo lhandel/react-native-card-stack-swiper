@@ -50,6 +50,8 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 ## CardStack events
 | Props             | type          | description                 |
 | ----------------- | ------------- | --------------------------- |
+| onSwipeStart    | func           | function to be called when a card swipe starts |
+| onSwipeEnd    | func           | function to be called when a card swipe ends (card is released) |
 | onSwiped          | func           | function to be called when a card is swiped. it receives the swiped card index   |
 | onSwipedLeft      | func           | function to be called when a card is swiped left. it receives the swiped card index   |
 | onSwipedRight     | func           | function to be called when a card is swiped right. it receives the swiped card index   |
