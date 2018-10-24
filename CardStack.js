@@ -61,6 +61,7 @@ export default class CardStack extends Component {
         return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > 10
       },  //(parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
       onPanResponderGrant: (evt, gestureState) => {
+        this.props.onSwipeStart();
         this.setState({ touchStart: new Date().getTime() });
       },
       onPanResponderMove: (evt, gestureState) => {
@@ -72,7 +73,7 @@ export default class CardStack extends Component {
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
-
+        this.props.onSwipeEnd();
         const currentTime = new Date().getTime();
         const swipeDuration = currentTime-this.state.touchStart;
         const { sindex } = this.state;
@@ -441,6 +442,8 @@ CardStack.propTypes = {
   secondCardZoom: PropTypes.number,
   loop: PropTypes.bool,
   renderNoMoreCards: PropTypes.func,
+  onSwipeStart: PropTypes.func,
+  onSwipeEnd: PropTypes.func,
   onSwiped: PropTypes.func,
   onSwipedLeft: PropTypes.func,
   onSwipedRight:PropTypes.func,
@@ -469,6 +472,8 @@ CardStack.defaultProps = {
   secondCardZoom: 0.95,
   loop: false,
   renderNoMoreCards: () => { return (<Text>No More Cards</Text>)},
+  onSwipeStart: () => null,
+  onSwipeEnd: () => null,
   onSwiped: () => {},
   onSwipedLeft: () => {},
   onSwipedRight: () => {},
