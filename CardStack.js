@@ -388,6 +388,9 @@ export default class CardStack extends Component {
 
     return (
         <View {...this._panResponder.panHandlers} style={[{position:'relative'},this.props.style]}>
+
+          {this.props.renderNoMoreCards()}
+
           <Animated.View style={{
                 position: 'absolute',
                 ...Platform.select({
@@ -426,8 +429,6 @@ export default class CardStack extends Component {
               }}>
               {cardA}
           </Animated.View>
-
-          {this.props.renderNoMoreCards()}
 
         </View>
     );
