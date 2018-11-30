@@ -61,7 +61,6 @@ export default class CardStack extends Component {
         return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > 10
       },  //(parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
       onPanResponderGrant: (evt, gestureState) => {
-        this.props.onSwipeStart();
         this.setState({ touchStart: new Date().getTime() });
       },
       onPanResponderMove: (evt, gestureState) => {
@@ -73,7 +72,7 @@ export default class CardStack extends Component {
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
-        this.props.onSwipeEnd();
+
         const currentTime = new Date().getTime();
         const swipeDuration = currentTime-this.state.touchStart;
         const { sindex } = this.state;
@@ -369,6 +368,104 @@ export default class CardStack extends Component {
     }
   }
 
+  renderTop(drag, cardA, cardB, topCard, SC, rotate) {
+    if(topCard == "cardB"){
+      return (
+        <Animated.View style={{
+          position: 'absolute',
+          ...Platform.select({
+            ios: {
+              zIndex: (topCard === 'cardB') ? 3 : 2,
+            },
+            android: {
+              elevation: (topCard === 'cardB') ? 3 : 2,
+            }
+          }),
+          transform: [
+            { rotate: (topCard === 'cardB') ? rotate: '0deg' },
+            {translateX: (topCard === 'cardB') ? drag.x: 0},
+            {translateY: (topCard === 'cardB') ? drag.y: 0},
+            { scale: (topCard === 'cardB') ? 1 : SC},
+          ]
+          }}>
+          {cardB}
+        </Animated.View>
+      );
+    }
+    else{
+      return (
+        <Animated.View style={{
+            position: 'absolute',
+            ...Platform.select({
+              ios: {
+                zIndex: (topCard === 'cardA') ? 3 : 2,
+              },
+              android: {
+                elevation: (topCard === 'cardA') ? 3 : 2,
+              }
+            }),
+            transform: [
+              { rotate: (topCard === 'cardA') ? rotate: '0deg' },
+              {translateX: (topCard === 'cardA') ? drag.x: 0},
+              {translateY: (topCard === 'cardA') ? drag.y: 0},
+              { scale: (topCard === 'cardA') ? 1 : SC},
+            ]
+        }}>
+          {cardA}
+        </Animated.View>
+      )
+    }
+  }
+
+  renderBottom(drag, cardA, cardB, topCard, SC, rotate) {
+    if(topCard == "cardA"){
+      return (
+        <Animated.View style={{
+          position: 'absolute',
+          ...Platform.select({
+            ios: {
+              zIndex: (topCard === 'cardB') ? 3 : 2,
+            },
+            android: {
+              elevation: (topCard === 'cardB') ? 3 : 2,
+            }
+          }),
+          transform: [
+            { rotate: (topCard === 'cardB') ? rotate: '0deg' },
+            {translateX: (topCard === 'cardB') ? drag.x: 0},
+            {translateY: (topCard === 'cardB') ? drag.y: 0},
+            { scale: (topCard === 'cardB') ? 1 : SC},
+          ]
+          }}>
+          {cardB}
+        </Animated.View>
+      );
+    }
+    else{
+      return (
+        <Animated.View style={{
+            position: 'absolute',
+            ...Platform.select({
+              ios: {
+                zIndex: (topCard === 'cardA') ? 3 : 2,
+              },
+              android: {
+                elevation: (topCard === 'cardA') ? 3 : 2,
+              }
+            }),
+            transform: [
+              { rotate: (topCard === 'cardA') ? rotate: '0deg' },
+              {translateX: (topCard === 'cardA') ? drag.x: 0},
+              {translateY: (topCard === 'cardA') ? drag.y: 0},
+              { scale: (topCard === 'cardA') ? 1 : SC},
+            ]
+        }}>
+          {cardA}
+        </Animated.View>
+      )
+    }
+  }
+
 
   render() {
 
@@ -385,48 +482,10 @@ export default class CardStack extends Component {
       outputRange: this.props.outputRotationRange,
       extrapolate: 'clamp',
     });
-
     return (
         <View {...this._panResponder.panHandlers} style={[{position:'relative'},this.props.style]}>
-          <Animated.View style={{
-                position: 'absolute',
-                ...Platform.select({
-                  ios: {
-                    zIndex: (topCard === 'cardB') ? 3 : 2,
-                  },
-                  android: {
-                    elevation: (topCard === 'cardB') ? 3 : 2,
-                  }
-                }),
-                transform: [
-                  { rotate: (topCard === 'cardB') ? rotate: '0deg' },
-                  {translateX: (topCard === 'cardB') ? drag.x: 0},
-                  {translateY: (topCard === 'cardB') ? drag.y: 0},
-                  { scale: (topCard === 'cardB') ? 1 : SC},
-                ]
-              }}>
-              {cardB}
-          </Animated.View>
-          <Animated.View style={{
-                position: 'absolute',
-                ...Platform.select({
-                  ios: {
-                    zIndex: (topCard === 'cardA') ? 3 : 2,
-                  },
-                  android: {
-                    elevation: (topCard === 'cardA') ? 3 : 2,
-                  }
-                }),
-                transform: [
-                  { rotate: (topCard === 'cardA') ? rotate: '0deg' },
-                  {translateX: (topCard === 'cardA') ? drag.x: 0},
-                  {translateY: (topCard === 'cardA') ? drag.y: 0},
-                  { scale: (topCard === 'cardA') ? 1 : SC},
-                ]
-              }}>
-              {cardA}
-          </Animated.View>
-
+          {this.renderBottom(drag, cardA, cardB, topCard, SC, rotate)}
+          {this.renderTop(drag, cardA, cardB, topCard, SC, rotate)}
           {this.props.renderNoMoreCards()}
 
         </View>
@@ -442,8 +501,6 @@ CardStack.propTypes = {
   secondCardZoom: PropTypes.number,
   loop: PropTypes.bool,
   renderNoMoreCards: PropTypes.func,
-  onSwipeStart: PropTypes.func,
-  onSwipeEnd: PropTypes.func,
   onSwiped: PropTypes.func,
   onSwipedLeft: PropTypes.func,
   onSwipedRight:PropTypes.func,
@@ -472,8 +529,6 @@ CardStack.defaultProps = {
   secondCardZoom: 0.95,
   loop: false,
   renderNoMoreCards: () => { return (<Text>No More Cards</Text>)},
-  onSwipeStart: () => null,
-  onSwipeEnd: () => null,
   onSwiped: () => {},
   onSwipedLeft: () => {},
   onSwipedRight: () => {},
