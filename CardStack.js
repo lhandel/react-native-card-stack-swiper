@@ -369,6 +369,13 @@ export default class CardStack extends Component {
     }
   }
 
+  /**
+   * @description CardB’s click feature is trigger the CardA on the card stack. (Solved on Android)
+   * @see https://facebook.github.io/react-native/docs/view#pointerevents
+   */
+  _setPointerEvents(topCard, topCardName) {
+    return { pointerEvents: topCard === topCardName ? "auto" : "none" }
+  }  
 
   render() {
 
@@ -388,7 +395,9 @@ export default class CardStack extends Component {
 
     return (
         <View {...this._panResponder.panHandlers} style={[{position:'relative'},this.props.style]}>
-          <Animated.View style={{
+          <Animated.View 
+              {...this._setPointerEvents(topCard, 'cardB')}
+              style={{
                 position: 'absolute',
                 ...Platform.select({
                   ios: {
@@ -407,7 +416,9 @@ export default class CardStack extends Component {
               }}>
               {cardB}
           </Animated.View>
-          <Animated.View style={{
+          <Animated.View 
+              {...this._setPointerEvents(topCard, 'cardA')}
+              style={{
                 position: 'absolute',
                 ...Platform.select({
                   ios: {
