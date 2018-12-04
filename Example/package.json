@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "react": "16.0.0",
-    "react-native": "0.50.4",
+    "react-native": "^0.57.7",
     "react-native-card-stack-swiper": "^1.0.4"
   },
   "devDependencies": {
