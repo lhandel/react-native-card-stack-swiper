@@ -65,6 +65,9 @@ export default class CardStack extends Component {
         this.setState({ touchStart: new Date().getTime() });
       },
       onPanResponderMove: (evt, gestureState) => {
+        const movedX = gestureState.moveX - gestureState.x0;
+        const movedY = gestureState.moveY - gestureState.y0;
+        this.props.onSwipe(movedX, movedY);
         const { verticalSwipe, horizontalSwipe } = this.props;
         const { verticalThreshold, horizontalThreshold } = this.props
         const dragDistance = this.distance((horizontalSwipe) ? gestureState.dx : 0, (verticalSwipe) ? gestureState.dy : 0 );
