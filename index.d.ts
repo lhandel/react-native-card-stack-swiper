@@ -5,7 +5,7 @@ export interface CardStackProps {
   style?: StyleProp<ViewStyle>;
   secondCardZoom?: number;
   loop?: boolean;
-  renderNoMoreCards?: boolean;
+  renderNoMoreCards?: () => React.ReactNode;
   disableTopSwipe?: boolean;
   disableBottomSwipe?: boolean;
   disableLeftSwipe?: boolean;
