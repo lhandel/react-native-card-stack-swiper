@@ -15,28 +15,25 @@ export interface CardStackProps {
   verticalThreshold?: boolean;
   horizontalThreshold?: boolean;
   outputRotationRange?: [string, string, string]
+  onSwipeStart?: (index: number) => void;
+  onSwipeEnd?: (index: number) => void; 
+  onSwiped?: (index: number) => void;
+  onSwipedLeft?: (index: number) => void;
+  onSwipedRight?: (index: number) => void;
+  onSwipedTop?: (index: number) => void;
+  onSwipedBottom?: (index: number) => void;
 }
 
-export interface CardStackEvents {
-  onSwipeStart: (index: number) => void;
-  onSwipeEnd: (index: number) => void; 
-  onSwiped: (index: number) => void;
-  onSwipedLeft: (index: number) => void;
-  onSwipedRight: (index: number) => void;
-  onSwipedTop: (index: number) => void;
-  onSwipedBottom: (index: number) => void;
-}
-
-export default class CardStack extends React.Component<CardStackProps & CardStackEvents> {
-  constructor(props: CardStackProps & CardStackEvents);
-  swipeLeft(): void;
-  swipeRight(): void;
-  swipeBottom(): void;
-  swipeTop(): void;
-  goBackFromLeft(): void;
-  goBackFromRight(): void;
-  goBackFromBottom(): void;
-  goBackFromTop(): void;
+export default class CardStack extends React.Component<CardStackProps> {
+  constructor(props: CardStackProps);
+  swipeLeft?(): void;
+  swipeRight?(): void;
+  swipeBottom?(): void;
+  swipeTop?(): void;
+  goBackFromLeft?(): void;
+  goBackFromRight?(): void;
+  goBackFromBottom?(): void;
+  goBackFromTop?(): void;
 }
 
 export interface CardProps {
