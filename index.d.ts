@@ -26,14 +26,14 @@ export interface CardStackProps {
 
 export default class CardStack extends React.Component<CardStackProps> {
   constructor(props: CardStackProps);
-  swipeLeft?(): void;
-  swipeRight?(): void;
-  swipeBottom?(): void;
-  swipeTop?(): void;
-  goBackFromLeft?(): void;
-  goBackFromRight?(): void;
-  goBackFromBottom?(): void;
-  goBackFromTop?(): void;
+  swipeLeft(): void;
+  swipeRight(): void;
+  swipeBottom(): void;
+  swipeTop(): void;
+  goBackFromLeft(): void;
+  goBackFromRight(): void;
+  goBackFromBottom(): void;
+  goBackFromTop(): void;
 }
 
 export interface CardProps {
