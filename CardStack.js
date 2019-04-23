@@ -304,6 +304,10 @@ export default class CardStack extends Component {
     // index of the swiped card
     const index = (loop) ? this.mod(nextCard-2, cards.length) : nextCard - 2;
 
+    if (index === cards.length-1){
+      this.props.onSwipedAll();
+    } 
+
     if((sindex-2 < cards.length) || (loop) ){
       Animated.spring(
         this.state.dragDistance,
@@ -488,7 +492,7 @@ CardStack.defaultProps = {
   onSwipedRight: () => {},
   onSwipedTop: () => {},
   onSwipedBottom: () => {},
-  onSwipedAll: () => {
+  onSwipedAll: async () => {
     console.log('onSwipedAll')
   },
 
