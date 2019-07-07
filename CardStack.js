@@ -142,13 +142,13 @@ export default class CardStack extends Component {
     this.initDeck();
   }
 
-  componentWillReceiveProps(nextProps){
-    if (nextProps.children !== this.props.children) {
-      this.setState({
-        cards: nextProps.children,
-        cardA: nextProps.children[(this.state.topCard=='cardA')? this.state.sindex-2 : this.state.sindex-1],
-        cardB: nextProps.children[(this.state.topCard=='cardB')? this.state.sindex-2 : this.state.sindex-1]
-      });
+  componentDidUpdate(nextProps){
+    if(nextProps.children !== this.props.children){
+        this.setState({
+            cards: nextProps.children,
+            cardA: nextProps.children[(this.state.topCard=='cardA')? this.state.sindex-2 : this.state.sindex-1],
+            cardB: nextProps.children[(this.state.topCard=='cardB')? this.state.sindex-2 : this.state.sindex-1]
+        });
     }
   }
 
@@ -376,7 +376,7 @@ export default class CardStack extends Component {
    */
   _setPointerEvents(topCard, topCardName) {
     return { pointerEvents: topCard === topCardName ? "auto" : "none" }
-  }  
+  }
 
   render() {
 
@@ -399,7 +399,7 @@ export default class CardStack extends Component {
 
           {this.props.renderNoMoreCards()}
 
-          <Animated.View 
+          <Animated.View
               {...this._setPointerEvents(topCard, 'cardB')}
               style={{
                 position: 'absolute',
@@ -418,7 +418,7 @@ export default class CardStack extends Component {
               }}>
               {cardB}
           </Animated.View>
-          <Animated.View 
+          <Animated.View
               {...this._setPointerEvents(topCard, 'cardA')}
               style={{
                 position: 'absolute',
@@ -503,5 +503,5 @@ CardStack.defaultProps = {
   outputRotationRange: ['-15deg','0deg','15deg'],
   duration: 200
 
-  
+
 }
