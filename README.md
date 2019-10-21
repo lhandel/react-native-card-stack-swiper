@@ -57,6 +57,7 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 | onSwipedRight     | func           | function to be called when a card is swiped right. it receives the swiped card index   |
 | onSwipedTop       | func           | function to be called when a card is swiped top. it receives the swiped card index  |
 | onSwipedBottom    | func           | function to be called when a card is swiped bottom. it receives the swiped card index |
+| onSwipedAll    | async func     | function to be called when the last card is swiped. Could trig action to refresh cards |
 
 
 ## CardStack actions
