@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import {
-  StyleSheet,
   View,
   Animated,
   PanResponder,
@@ -14,7 +13,6 @@ const { height, width } = Dimensions.get('window');
 
 export default class CardStack extends Component {
 
-
   static distance(x, y) {
     const a = Math.abs(x);
     const b = Math.abs(y);
@@ -24,8 +22,8 @@ export default class CardStack extends Component {
 
   constructor(props) {
     super(props);
-    this.state ={
-      drag: new Animated.ValueXY({x: 0, y: 0}),
+    this.state = {
+      drag: new Animated.ValueXY({ x: 0, y: 0 }),
       dragDistance: new Animated.Value(0),
       sindex: 0, // index to the next card to be renderd mod card.length
       cardA: null,
@@ -35,14 +33,10 @@ export default class CardStack extends Component {
       touchStart: 0,
     };
     this.distance = this.constructor.distance;
-  }
-
-
-  componentWillMount() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => false,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) =>  {
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
         const isVerticalSwipe = Math.sqrt(
           Math.pow(gestureState.dx, 2) < Math.pow(gestureState.dy, 2)
         )
@@ -50,7 +44,7 @@ export default class CardStack extends Component {
           return false
         }
         return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > 10
-      }, //(parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
+      },
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
         const isVerticalSwipe = Math.sqrt(
           Math.pow(gestureState.dx, 2) < Math.pow(gestureState.dy, 2)
@@ -59,74 +53,63 @@ export default class CardStack extends Component {
           return false
         }
         return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > 10
-      },  //(parseInt(gestureState.dx) !== 0 && parseInt(gestureState.dy) !== 0),
+      },
       onPanResponderGrant: (evt, gestureState) => {
         this.props.onSwipeStart();
         this.setState({ touchStart: new Date().getTime() });
       },
       onPanResponderMove: (evt, gestureState) => {
         const { verticalSwipe, horizontalSwipe } = this.props;
-        const { verticalThreshold, horizontalThreshold } = this.props
-        const dragDistance = this.distance((horizontalSwipe) ? gestureState.dx : 0, (verticalSwipe) ? gestureState.dy : 0 );
+        const dragDistance = this.distance((horizontalSwipe) ? gestureState.dx : 0, (verticalSwipe) ? gestureState.dy : 0);
         this.state.dragDistance.setValue(dragDistance);
-        this.state.drag.setValue({x: (horizontalSwipe) ? gestureState.dx : 0, y: (verticalSwipe) ? gestureState.dy : 0});
+        this.state.drag.setValue({ x: (horizontalSwipe) ? gestureState.dx : 0, y: (verticalSwipe) ? gestureState.dy : 0 });
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
         this.props.onSwipeEnd();
         const currentTime = new Date().getTime();
-        const swipeDuration = currentTime-this.state.touchStart;
-        const { sindex } = this.state;
+        const swipeDuration = currentTime - this.state.touchStart;
         const { verticalThreshold,
-                horizontalThreshold,
-                disableTopSwipe,
-                disableLeftSwipe,
-                disableRightSwipe,
-                disableBottomSwipe,
-              } = this.props;
+          horizontalThreshold,
+          disableTopSwipe,
+          disableLeftSwipe,
+          disableRightSwipe,
+          disableBottomSwipe,
+        } = this.props;
 
-
-        if (((Math.abs(gestureState.dy) > verticalThreshold)  ||
-            ( Math.abs(gestureState.dy) > verticalThreshold*0.8 &&
-              swipeDuration < 150)
-            ) && this.props.verticalSwipe)
-        {
+        if (((Math.abs(gestureState.dy) > verticalThreshold) ||
+          (Math.abs(gestureState.dy) > verticalThreshold * 0.8 &&
+            swipeDuration < 150)
+        ) && this.props.verticalSwipe) {
 
           const swipeDirection = (gestureState.dy < 0) ? height * -1 : height;
-          if(swipeDirection < 0 && !disableTopSwipe)
-          {
+          if (swipeDirection < 0 && !disableTopSwipe) {
 
             this._nextCard('top', gestureState.dx, swipeDirection, this.props.duration);
           }
-          else if (swipeDirection > 0 && !disableBottomSwipe)
-          {
+          else if (swipeDirection > 0 && !disableBottomSwipe) {
             this._nextCard('bottom', gestureState.dx, swipeDirection, this.props.duration);
           }
-          else
-          {
+          else {
             this._resetCard();
           }
-        }else if (((Math.abs(gestureState.dx) > horizontalThreshold) ||
-                  (Math.abs(gestureState.dx) > horizontalThreshold*0.6 &&
-                  swipeDuration < 150)
-                ) && this.props.horizontalSwipe) {
+        } else if (((Math.abs(gestureState.dx) > horizontalThreshold) ||
+          (Math.abs(gestureState.dx) > horizontalThreshold * 0.6 &&
+            swipeDuration < 150)
+        ) && this.props.horizontalSwipe) {
 
           const swipeDirection = (gestureState.dx < 0) ? width * -1 : width;
-          if (swipeDirection < 0 && !disableLeftSwipe)
-          {
+          if (swipeDirection < 0 && !disableLeftSwipe) {
             this._nextCard('left', swipeDirection, gestureState.dy, this.props.duration);
           }
-          else if(swipeDirection > 0 && !disableRightSwipe)
-          {
+          else if (swipeDirection > 0 && !disableRightSwipe) {
             this._nextCard('right', swipeDirection, gestureState.dy, this.props.duration);
           }
-          else
-          {
+          else {
             this._resetCard();
           }
         }
-        else
-        {
+        else {
           this._resetCard();
         }
       },
@@ -138,11 +121,11 @@ export default class CardStack extends Component {
     });
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.initDeck();
   }
 
-  componentDidUpdate(nextProps){
+  componentDidUpdate(nextProps) {
     let aIndex = (this.state.topCard == 'cardA') ? this.state.sindex - 2 : this.state.sindex - 1;
     let bIndex = (this.state.topCard == 'cardB') ? this.state.sindex - 2 : this.state.sindex - 1;
 
@@ -160,14 +143,14 @@ export default class CardStack extends Component {
 
   initDeck() {
     // check if we only have 1 child
-    if(typeof this.props.children !== 'undefined' && !Array.isArray(this.props.children)){
+    if (typeof this.props.children !== 'undefined' && !Array.isArray(this.props.children)) {
       this.setState({
         cards: [this.props.children],
         cardA: this.props.children,
         cardB: null,
         sindex: 2,
       });
-    }else if(Array.isArray(this.props.children)){
+    } else if (Array.isArray(this.props.children)) {
       this.setState({
         cards: this.props.children,
         cardA: this.props.children[0],
@@ -177,8 +160,7 @@ export default class CardStack extends Component {
     }
   }
 
-  _resetCard(){
-
+  _resetCard() {
     Animated.timing(
       this.state.dragDistance,
       {
@@ -189,27 +171,25 @@ export default class CardStack extends Component {
     Animated.spring(
       this.state.drag,
       {
-        toValue: {x: 0, y: 0},
+        toValue: { x: 0, y: 0 },
         duration: this.props.duration,
       }
     ).start();
-
   }
 
-
-  goBackFromTop(){
+  goBackFromTop() {
     this._goBack('top');
   }
 
-  goBackFromRight(){
+  goBackFromRight() {
     this._goBack('right');
   }
 
-  goBackFromLeft(){
+  goBackFromLeft() {
     this._goBack('left');
   }
 
-  goBackFromBottom(){
+  goBackFromBottom() {
     this._goBack('bottom');
   }
 
@@ -217,20 +197,20 @@ export default class CardStack extends Component {
     return ((n % m) + m) % m;
   }
 
-  _goBack(direction){
-    const {cardA, cardB, cards, sindex, topCard} = this.state;
+  _goBack(direction) {
+    const { cardA, cardB, cards, sindex, topCard } = this.state;
 
-    if((sindex-3) < 0 && !this.props.loop) return;
+    if ((sindex - 3) < 0 && !this.props.loop) return;
 
-    const previusCardIndex = this.mod(sindex-3, cards.length)
+    const previusCardIndex = this.mod(sindex - 3, cards.length)
     let update = {};
-    if(topCard === 'cardA'){
+    if (topCard === 'cardA') {
       update = {
         ...update,
         cardB: cards[previusCardIndex]
 
       }
-    }else{
+    } else {
       update = {
         ...update,
         cardA: cards[previusCardIndex],
@@ -240,24 +220,24 @@ export default class CardStack extends Component {
     this.setState({
       ...update,
       topCard: (topCard === 'cardA') ? 'cardB' : 'cardA',
-      sindex: sindex-1
+      sindex: sindex - 1
     }, () => {
 
       switch (direction) {
         case 'top':
-          this.state.drag.setValue({x: 0, y: -height});
+          this.state.drag.setValue({ x: 0, y: -height });
           this.state.dragDistance.setValue(height);
           break;
         case 'left':
-          this.state.drag.setValue({x: -width, y: 0});
+          this.state.drag.setValue({ x: -width, y: 0 });
           this.state.dragDistance.setValue(width);
           break;
         case 'right':
-          this.state.drag.setValue({x: width, y: 0});
+          this.state.drag.setValue({ x: width, y: 0 });
           this.state.dragDistance.setValue(width);
           break;
         case 'bottom':
-          this.state.drag.setValue({x: 0, y: height});
+          this.state.drag.setValue({ x: 0, y: height });
           this.state.dragDistance.setValue(width);
           break;
         default:
@@ -275,32 +255,30 @@ export default class CardStack extends Component {
       Animated.spring(
         this.state.drag,
         {
-          toValue: {x: 0, y: 0},
+          toValue: { x: 0, y: 0 },
           duration: this.props.duration,
         }
       ).start();
     })
   }
 
-
-
-  swipeTop(duration){
+  swipeTop(duration) {
     this._nextCard('top', 0, -height, duration);
   }
 
-  swipeBottom(duration){
+  swipeBottom(duration) {
     this._nextCard('bottom', 0, height, duration);
   }
 
-  swipeRight(duration){
+  swipeRight(duration) {
     this._nextCard('right', width, 0, duration);
   }
 
-  swipeLeft(duration){
+  swipeLeft(duration) {
     this._nextCard('left', -width, 0, duration);
   }
 
-  _nextCard(direction, x, y, duration=400){
+  _nextCard(direction, x, y, duration = 400) {
     const { verticalSwipe, horizontalSwipe, loop } = this.props;
     const { sindex, cards, topCard } = this.state;
 
@@ -308,13 +286,13 @@ export default class CardStack extends Component {
     const nextCard = (loop) ? (Math.abs(sindex) % cards.length) : sindex;
 
     // index of the swiped card
-    const index = (loop) ? this.mod(nextCard-2, cards.length) : nextCard - 2;
+    const index = (loop) ? this.mod(nextCard - 2, cards.length) : nextCard - 2;
 
-    if (index === cards.length-1){
+    if (index === cards.length - 1) {
       this.props.onSwipedAll();
-    } 
+    }
 
-    if((sindex-2 < cards.length) || (loop) ){
+    if ((sindex - 2 < cards.length) || (loop)) {
       Animated.spring(
         this.state.dragDistance,
         {
@@ -331,27 +309,27 @@ export default class CardStack extends Component {
         }
       ).start(() => {
 
-        const newTopCard =  (topCard === 'cardA') ? 'cardB' : 'cardA';
+        const newTopCard = (topCard === 'cardA') ? 'cardB' : 'cardA';
 
         let update = {};
-        if(newTopCard === 'cardA') {
+        if (newTopCard === 'cardA') {
           update = {
             ...update,
             cardB: cards[nextCard]
           };
         }
-        if(newTopCard === 'cardB') {
+        if (newTopCard === 'cardB') {
           update = {
             ...update,
             cardA: cards[nextCard],
           };
         }
-        this.state.drag.setValue({x: 0, y: 0});
+        this.state.drag.setValue({ x: 0, y: 0 });
         this.state.dragDistance.setValue(0);
         this.setState({
           ...update,
           topCard: newTopCard,
-          sindex: nextCard+1
+          sindex: nextCard + 1
         });
 
         this.props.onSwiped(index);
@@ -394,61 +372,61 @@ export default class CardStack extends Component {
     const { drag, dragDistance, cardA, cardB, topCard, sindex } = this.state;
 
     const SC = dragDistance.interpolate({
-      inputRange: [0,10, 220],
-      outputRange: [secondCardZoom,secondCardZoom,1],
+      inputRange: [0, 10, 220],
+      outputRange: [secondCardZoom, secondCardZoom, 1],
       extrapolate: 'clamp',
     });
     const rotate = drag.x.interpolate({
-      inputRange: [-320,0,320],
+      inputRange: [-320, 0, 320],
       outputRange: this.props.outputRotationRange,
       extrapolate: 'clamp',
     });
 
     return (
-        <View {...this._panResponder.panHandlers} style={[{position:'relative'},this.props.style]}>
+      <View {...this._panResponder.panHandlers} style={[{ position: 'relative' }, this.props.style]}>
 
-          {this.props.renderNoMoreCards()}
+        {this.props.renderNoMoreCards()}
 
-          <Animated.View
-              {...this._setPointerEvents(topCard, 'cardB')}
-              style={{
-                position: 'absolute',
-                zIndex: (topCard === 'cardB') ? 3 : 2,
-                ...Platform.select({
-                  android: {
-                    elevation: (topCard === 'cardB') ? 3 : 2,
-                  }
-                }),
-                transform: [
-                  { rotate: (topCard === 'cardB') ? rotate: '0deg' },
-                  {translateX: (topCard === 'cardB') ? drag.x: 0},
-                  {translateY: (topCard === 'cardB') ? drag.y: 0},
-                  { scale: (topCard === 'cardB') ? 1 : SC},
-                ]
-              }}>
-              {cardB}
-          </Animated.View>
-          <Animated.View
-              {...this._setPointerEvents(topCard, 'cardA')}
-              style={{
-                position: 'absolute',
-                zIndex: (topCard === 'cardA') ? 3 : 2,
-                ...Platform.select({
-                  android: {
-                    elevation: (topCard === 'cardA') ? 3 : 2,
-                  }
-                }),
-                transform: [
-                  { rotate: (topCard === 'cardA') ? rotate: '0deg' },
-                  {translateX: (topCard === 'cardA') ? drag.x: 0},
-                  {translateY: (topCard === 'cardA') ? drag.y: 0},
-                  { scale: (topCard === 'cardA') ? 1 : SC},
-                ]
-              }}>
-              {cardA}
-          </Animated.View>
+        <Animated.View
+          {...this._setPointerEvents(topCard, 'cardB')}
+          style={{
+            position: 'absolute',
+            zIndex: (topCard === 'cardB') ? 3 : 2,
+            ...Platform.select({
+              android: {
+                elevation: (topCard === 'cardB') ? 3 : 2,
+              }
+            }),
+            transform: [
+              { rotate: (topCard === 'cardB') ? rotate : '0deg' },
+              { translateX: (topCard === 'cardB') ? drag.x : 0 },
+              { translateY: (topCard === 'cardB') ? drag.y : 0 },
+              { scale: (topCard === 'cardB') ? 1 : SC },
+            ]
+          }}>
+          {cardB}
+        </Animated.View>
+        <Animated.View
+          {...this._setPointerEvents(topCard, 'cardA')}
+          style={{
+            position: 'absolute',
+            zIndex: (topCard === 'cardA') ? 3 : 2,
+            ...Platform.select({
+              android: {
+                elevation: (topCard === 'cardA') ? 3 : 2,
+              }
+            }),
+            transform: [
+              { rotate: (topCard === 'cardA') ? rotate : '0deg' },
+              { translateX: (topCard === 'cardA') ? drag.x : 0 },
+              { translateY: (topCard === 'cardA') ? drag.y : 0 },
+              { scale: (topCard === 'cardA') ? 1 : SC },
+            ]
+          }}>
+          {cardA}
+        </Animated.View>
 
-        </View>
+      </View>
     );
   }
 }
@@ -465,7 +443,7 @@ CardStack.propTypes = {
   onSwipeEnd: PropTypes.func,
   onSwiped: PropTypes.func,
   onSwipedLeft: PropTypes.func,
-  onSwipedRight:PropTypes.func,
+  onSwipedRight: PropTypes.func,
   onSwipedTop: PropTypes.func,
   onSwipedBottom: PropTypes.func,
   onSwiped: PropTypes.func,
@@ -487,28 +465,28 @@ CardStack.propTypes = {
 
 CardStack.defaultProps = {
 
-  style:{},
+  style: {},
   secondCardZoom: 0.95,
   loop: false,
-  renderNoMoreCards: () => { return (<Text>No More Cards</Text>)},
+  renderNoMoreCards: () => { return (<Text>No More Cards</Text>) },
   onSwipeStart: () => null,
   onSwipeEnd: () => null,
-  onSwiped: () => {},
-  onSwipedLeft: () => {},
-  onSwipedRight: () => {},
-  onSwipedTop: () => {},
-  onSwipedBottom: () => {},
-  onSwipedAll: async () => {},
+  onSwiped: () => { },
+  onSwipedLeft: () => { },
+  onSwipedRight: () => { },
+  onSwipedTop: () => { },
+  onSwipedBottom: () => { },
+  onSwipedAll: async () => { },
 
   disableBottomSwipe: false,
   disableLeftSwipe: false,
   disableRightSwipe: false,
   disableTopSwipe: false,
   verticalSwipe: true,
-  verticalThreshold: height/4,
+  verticalThreshold: height / 4,
   horizontalSwipe: true,
-  horizontalThreshold: width/2,
-  outputRotationRange: ['-15deg','0deg','15deg'],
+  horizontalThreshold: width / 2,
+  outputRotationRange: ['-15deg', '0deg', '15deg'],
   duration: 200
 
 
