@@ -492,9 +492,7 @@ CardStack.defaultProps = {
   onSwipedRight: () => {},
   onSwipedTop: () => {},
   onSwipedBottom: () => {},
-  onSwipedAll: async () => {
-    console.log('onSwipedAll')
-  },
+  onSwipedAll: async () => {},
 
   disableBottomSwipe: false,
   disableLeftSwipe: false,
