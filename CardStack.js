@@ -143,12 +143,18 @@ export default class CardStack extends Component {
   }
 
   componentDidUpdate(nextProps){
-    if(nextProps.children !== this.props.children){
-        this.setState({
-            cards: nextProps.children,
-            cardA: nextProps.children[(this.state.topCard=='cardA')? this.state.sindex-2 : this.state.sindex-1],
-            cardB: nextProps.children[(this.state.topCard=='cardB')? this.state.sindex-2 : this.state.sindex-1]
-        });
+    let aIndex = (this.state.topCard == 'cardA') ? this.state.sindex - 2 : this.state.sindex - 1;
+    let bIndex = (this.state.topCard == 'cardB') ? this.state.sindex - 2 : this.state.sindex - 1;
+
+    aIndex = aIndex < 0 ? nextProps.children.length + aIndex : aIndex;
+    bIndex = bIndex < 0 ? nextProps.children.length + bIndex : bIndex;
+
+    if (nextProps.children !== this.props.children) {
+      this.setState({
+        cards: nextProps.children,
+        cardA: nextProps.children[aIndex],
+        cardB: nextProps.children[bIndex],
+      });
     }
   }
 
@@ -303,6 +309,10 @@ export default class CardStack extends Component {
 
     // index of the swiped card
     const index = (loop) ? this.mod(nextCard-2, cards.length) : nextCard - 2;
+
+    if (index === cards.length-1){
+      this.props.onSwipedAll();
+    } 
 
     if((sindex-2 < cards.length) || (loop) ){
       Animated.spring(
@@ -488,9 +498,7 @@ CardStack.defaultProps = {
   onSwipedRight: () => {},
   onSwipedTop: () => {},
   onSwipedBottom: () => {},
-  onSwipedAll: () => {
-    console.log('onSwipedAll')
-  },
+  onSwipedAll: async () => {},
 
   disableBottomSwipe: false,
   disableLeftSwipe: false,
