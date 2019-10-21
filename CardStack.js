@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import { polyfill } from 'react-lifecycles-compat';
 import {
   View,
   Animated,
@@ -11,7 +12,7 @@ import {
 
 const { height, width } = Dimensions.get('window');
 
-export default class CardStack extends Component {
+class CardStack extends Component {
 
   static distance(x, y) {
     const a = Math.abs(x);
@@ -488,6 +489,6 @@ CardStack.defaultProps = {
   horizontalThreshold: width / 2,
   outputRotationRange: ['-15deg', '0deg', '15deg'],
   duration: 200
-
-
 }
+polyfill(CardStack);
+export default CardStack;
