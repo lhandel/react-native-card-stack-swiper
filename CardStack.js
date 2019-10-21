@@ -122,17 +122,12 @@ class CardStack extends Component {
     });
   }
 
-  componentDidMount() {
-    this.initDeck();
-  }
-
   componentDidUpdate(nextProps) {
     let aIndex = (this.state.topCard == 'cardA') ? this.state.sindex - 2 : this.state.sindex - 1;
     let bIndex = (this.state.topCard == 'cardB') ? this.state.sindex - 2 : this.state.sindex - 1;
-
-    aIndex = aIndex < 0 ? nextProps.children.length + aIndex : aIndex;
-    bIndex = bIndex < 0 ? nextProps.children.length + bIndex : bIndex;
-
+        aIndex = aIndex < 0 ? nextProps.children.length + aIndex : aIndex;
+        bIndex = bIndex < 0 ? nextProps.children.length + bIndex : bIndex;
+        
     if (nextProps.children !== this.props.children) {
       this.setState({
         cards: nextProps.children,
@@ -140,6 +135,10 @@ class CardStack extends Component {
         cardB: nextProps.children[bIndex],
       });
     }
+  }
+
+  componentDidMount() {
+    this.initDeck();
   }
 
   initDeck() {
@@ -369,7 +368,7 @@ class CardStack extends Component {
 
   render() {
 
-    const { secondCardZoom } = this.props;
+    const { secondCardZoom, renderNoMoreCards } = this.props;
     const { drag, dragDistance, cardA, cardB, topCard, sindex } = this.state;
 
     const SC = dragDistance.interpolate({
@@ -385,7 +384,7 @@ class CardStack extends Component {
 
     return (
       <View {...this._panResponder.panHandlers} style={[{ position: 'relative' }, this.props.style]}>
-
+        
         {this.props.renderNoMoreCards()}
 
         <Animated.View
@@ -439,7 +438,7 @@ CardStack.propTypes = {
   style: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
   secondCardZoom: PropTypes.number,
   loop: PropTypes.bool,
-  renderNoMoreCards: PropTypes.func,
+  renderNoMoreCards: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
   onSwipeStart: PropTypes.func,
   onSwipeEnd: PropTypes.func,
   onSwiped: PropTypes.func,
