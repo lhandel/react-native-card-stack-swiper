@@ -123,22 +123,27 @@ class CardStack extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    let aIndex = (this.state.topCard == 'cardA') ? this.state.sindex - 2 : this.state.sindex - 1;
-    let bIndex = (this.state.topCard == 'cardB') ? this.state.sindex - 2 : this.state.sindex - 1;
-        aIndex = aIndex < 0 ? nextProps.children.length + aIndex : aIndex;
-        bIndex = bIndex < 0 ? nextProps.children.length + bIndex : bIndex;
-        
-    if (nextProps.children !== this.props.children) {
-      this.setState({
-        cards: nextProps.children,
-        cardA: nextProps.children[aIndex],
-        cardB: nextProps.children[bIndex],
-      });
+    if (!this._isSameChildren(nextProps.children, this.props.children)) { 
+      let aIndex = (this.state.topCard == 'cardA') ? this.mod(this.state.sindex - 2, nextProps.children.length) : this.mod(this.state.sindex - 1, nextProps.children.length);
+      let bIndex = (this.state.topCard == 'cardB') ? this.mod(this.state.sindex - 2, nextProps.children.length) : this.mod(this.state.sindex - 1, nextProps.children.length);
+      this.setState({ 
+        cards: nextProps.children, 
+        cardA: nextProps.children[aIndex], 
+        cardB: nextProps.children[bIndex]
+      }); 
     }
   }
 
   componentDidMount() {
     this.initDeck();
+  }
+
+  _isSameChildren(a, b) {
+    if (a.length != b.length) return false;
+    for (let i in a) {
+      if (a[i].key != b[i].key) { return false }
+    }
+    return true
   }
 
   initDeck() {
@@ -384,7 +389,7 @@ class CardStack extends Component {
 
     return (
       <View {...this._panResponder.panHandlers} style={[{ position: 'relative' }, this.props.style]}>
-        
+
         {this.props.renderNoMoreCards()}
 
         <Animated.View
