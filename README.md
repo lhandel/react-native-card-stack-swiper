@@ -34,6 +34,7 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 | --------------------| ------------- | --------------------------------| ------------- | ------------- |
 | style               | object        | container style                 |               | {}            |
 | secondCardZoom      | number        | second card zoom                |               | 0.95          |
+| duration            | number        | animation duration              |               | 300           |
 | loop                | bool          | keep swiping indefinitely       |               | false         |
 | renderNoMoreCards   | func          |                                 |               | false         |
 | disableTopSwipe     | bool          | disable top swipe               |               | false         |

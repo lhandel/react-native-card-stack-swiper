@@ -99,7 +99,7 @@ class CardStack extends Component {
             swipeDuration < 150)
         ) && this.props.horizontalSwipe) {
 
-          const swipeDirection = (gestureState.dx < 0) ? width * -1 : width;
+          const swipeDirection = (gestureState.dx < 0) ? width * -1.5 : width * 1.5;
           if (swipeDirection < 0 && !disableLeftSwipe) {
             this._nextCard('left', swipeDirection, gestureState.dy, this.props.duration);
           }
@@ -123,14 +123,14 @@ class CardStack extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    if (!this._isSameChildren(nextProps.children, this.props.children)) { 
+    if (!this._isSameChildren(nextProps.children, this.props.children)) {
       let aIndex = (this.state.topCard == 'cardA') ? this.mod(this.state.sindex - 2, nextProps.children.length) : this.mod(this.state.sindex - 1, nextProps.children.length);
       let bIndex = (this.state.topCard == 'cardB') ? this.mod(this.state.sindex - 2, nextProps.children.length) : this.mod(this.state.sindex - 1, nextProps.children.length);
-      this.setState({ 
-        cards: nextProps.children, 
-        cardA: nextProps.children[aIndex], 
+      this.setState({
+        cards: nextProps.children,
+        cardA: nextProps.children[aIndex],
         cardB: nextProps.children[bIndex]
-      }); 
+      });
     }
   }
 
@@ -203,7 +203,7 @@ class CardStack extends Component {
   }
 
   _goBack(direction) {
-    const { cardA, cardB, cards, sindex, topCard } = this.state;
+    const { cards, sindex, topCard } = this.state;
 
     if ((sindex - 3) < 0 && !this.props.loop) return;
 
@@ -267,20 +267,20 @@ class CardStack extends Component {
     })
   }
 
-  swipeTop(duration) {
-    this._nextCard('top', 0, -height, duration);
+  swipeTop(d = null) {
+    this._nextCard('top', 0, -height, d || this.props.duration);
   }
 
-  swipeBottom(duration) {
-    this._nextCard('bottom', 0, height, duration);
+  swipeBottom(d = null) {
+    this._nextCard('bottom', 0, height, d || this.props.duration);
   }
 
-  swipeRight(duration) {
-    this._nextCard('right', width, 0, duration);
+  swipeRight(d = null) {
+    this._nextCard('right', width * 1.5, 0, d || this.props.duration);
   }
 
-  swipeLeft(duration) {
-    this._nextCard('left', -width, 0, duration);
+  swipeLeft(d = null) {
+    this._nextCard('left', -width * 1.5, 0, d || this.props.duration);
   }
 
   _nextCard(direction, x, y, duration = 400) {
@@ -341,19 +341,23 @@ class CardStack extends Component {
         switch (direction) {
           case 'left':
             this.props.onSwipedLeft(index);
-            this.state.cards[index].props.onSwipedLeft();
+            if (this.state.cards[index].props.onSwipedLeft)
+              this.state.cards[index].props.onSwipedLeft();
             break;
           case 'right':
             this.props.onSwipedRight(index);
-            this.state.cards[index].props.onSwipedRight();
+            if (this.state.cards[index].props.onSwipedRight)
+              this.state.cards[index].props.onSwipedRight();
             break;
           case 'top':
             this.props.onSwipedTop(index);
-            this.state.cards[index].props.onSwipedTop();
+            if (this.state.cards[index].props.onSwipedTop)
+              this.state.cards[index].props.onSwipedTop();
             break;
           case 'bottom':
             this.props.onSwipedBottom(index);
-            this.state.cards[index].props.onSwipedBottom();
+            if (this.state.cards[index].props.onSwipedBottom)
+              this.state.cards[index].props.onSwipedBottom();
             break;
           default:
         }
@@ -376,13 +380,13 @@ class CardStack extends Component {
     const { secondCardZoom, renderNoMoreCards } = this.props;
     const { drag, dragDistance, cardA, cardB, topCard, sindex } = this.state;
 
-    const SC = dragDistance.interpolate({
-      inputRange: [0, 10, 220],
+    const scale = dragDistance.interpolate({
+      inputRange: [ 0, 10, 220],
       outputRange: [secondCardZoom, secondCardZoom, 1],
       extrapolate: 'clamp',
     });
     const rotate = drag.x.interpolate({
-      inputRange: [-320, 0, 320],
+      inputRange: [width * -1.5, 0, width * 1.5],
       outputRange: this.props.outputRotationRange,
       extrapolate: 'clamp',
     });
@@ -390,7 +394,7 @@ class CardStack extends Component {
     return (
       <View {...this._panResponder.panHandlers} style={[{ position: 'relative' }, this.props.style]}>
 
-        {this.props.renderNoMoreCards()}
+        {renderNoMoreCards()}
 
         <Animated.View
           {...this._setPointerEvents(topCard, 'cardB')}
@@ -406,7 +410,7 @@ class CardStack extends Component {
               { rotate: (topCard === 'cardB') ? rotate : '0deg' },
               { translateX: (topCard === 'cardB') ? drag.x : 0 },
               { translateY: (topCard === 'cardB') ? drag.y : 0 },
-              { scale: (topCard === 'cardB') ? 1 : SC },
+              { scale: (topCard === 'cardB') ? 1 : scale },
             ]
           }}>
           {cardB}
@@ -425,7 +429,7 @@ class CardStack extends Component {
               { rotate: (topCard === 'cardA') ? rotate : '0deg' },
               { translateX: (topCard === 'cardA') ? drag.x : 0 },
               { translateY: (topCard === 'cardA') ? drag.y : 0 },
-              { scale: (topCard === 'cardA') ? 1 : SC },
+              { scale: (topCard === 'cardA') ? 1 : scale },
             ]
           }}>
           {cardA}
@@ -465,7 +469,6 @@ CardStack.propTypes = {
   horizontalThreshold: PropTypes.number,
   outputRotationRange: PropTypes.array,
   duration: PropTypes.number
-
 }
 
 CardStack.defaultProps = {
@@ -492,7 +495,7 @@ CardStack.defaultProps = {
   horizontalSwipe: true,
   horizontalThreshold: width / 2,
   outputRotationRange: ['-15deg', '0deg', '15deg'],
-  duration: 200
+  duration: 300
 }
 polyfill(CardStack);
 export default CardStack;
