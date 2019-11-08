@@ -140,6 +140,7 @@ class CardStack extends Component {
 
   _isSameChildren(a, b) {
     if (a.length != b.length) return false;
+    if (!b) return false;
     for (let i in a) {
       if (a[i].key != b[i].key) { return false }
     }
