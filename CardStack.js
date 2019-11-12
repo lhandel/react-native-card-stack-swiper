@@ -121,19 +121,19 @@ class CardStack extends Component {
       },
     });
   }
-
-  componentDidUpdate(nextProps) {
-    if (!this._isSameChildren(nextProps.children, this.props.children)) {
-      let aIndex = (this.state.topCard == 'cardA') ? this.mod(this.state.sindex - 2, nextProps.children.length) : this.mod(this.state.sindex - 1, nextProps.children.length);
-      let bIndex = (this.state.topCard == 'cardB') ? this.mod(this.state.sindex - 2, nextProps.children.length) : this.mod(this.state.sindex - 1, nextProps.children.length);
+  
+  componentDidUpdate(prevProps) {
+    if (!this._isSameChildren(this.props.children, prevProps.children)) {
+      let aIndex = (this.state.topCard == 'cardA') ? this.mod(this.state.sindex - 2, this.props.children.length) : this.mod(this.state.sindex - 1, this.props.children.length);
+      let bIndex = (this.state.topCard == 'cardB') ? this.mod(this.state.sindex - 2, this.props.children.length) : this.mod(this.state.sindex - 1, this.props.children.length);
       this.setState({
-        cards: nextProps.children,
-        cardA: nextProps.children[aIndex],
-        cardB: nextProps.children[bIndex]
+        cards: this.props.children,
+        cardA: this.props.children[aIndex],
+        cardB: this.props.children[bIndex]
       });
     }
   }
-
+  
   componentDidMount() {
     this.initDeck();
   }
@@ -142,7 +142,7 @@ class CardStack extends Component {
     if (typeof a !=typeof b) return false;
     if (typeof a === 'undefined') return false;
     if (a.length != b.length) return false;
-    
+
     for (let i in a) {
       if (a[i].key != b[i].key) { return false }
     }
