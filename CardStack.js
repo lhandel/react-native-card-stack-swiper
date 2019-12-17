@@ -70,7 +70,8 @@ class CardStack extends Component {
         this.props.onSwipeEnd();
         const currentTime = new Date().getTime();
         const swipeDuration = currentTime - this.state.touchStart;
-        const { verticalThreshold,
+        const { 
+          verticalThreshold,
           horizontalThreshold,
           disableTopSwipe,
           disableLeftSwipe,
@@ -78,7 +79,22 @@ class CardStack extends Component {
           disableBottomSwipe,
         } = this.props;
 
-        if (((Math.abs(gestureState.dy) > verticalThreshold) ||
+        if (((Math.abs(gestureState.dx) > horizontalThreshold) ||
+          (Math.abs(gestureState.dx) > horizontalThreshold * 0.6 &&
+            swipeDuration < 150)
+        ) && this.props.horizontalSwipe) {
+
+          const swipeDirection = (gestureState.dx < 0) ? width * -1.5 : width * 1.5;
+          if (swipeDirection < 0 && !disableLeftSwipe) {
+            this._nextCard('left', swipeDirection, gestureState.dy, this.props.duration);
+          }
+          else if (swipeDirection > 0 && !disableRightSwipe) {
+            this._nextCard('right', swipeDirection, gestureState.dy, this.props.duration);
+          }
+          else {
+            this._resetCard();
+          }
+        } else if (((Math.abs(gestureState.dy) > verticalThreshold) ||
           (Math.abs(gestureState.dy) > verticalThreshold * 0.8 &&
             swipeDuration < 150)
         ) && this.props.verticalSwipe) {
@@ -90,21 +106,6 @@ class CardStack extends Component {
           }
           else if (swipeDirection > 0 && !disableBottomSwipe) {
             this._nextCard('bottom', gestureState.dx, swipeDirection, this.props.duration);
-          }
-          else {
-            this._resetCard();
-          }
-        } else if (((Math.abs(gestureState.dx) > horizontalThreshold) ||
-          (Math.abs(gestureState.dx) > horizontalThreshold * 0.6 &&
-            swipeDuration < 150)
-        ) && this.props.horizontalSwipe) {
-
-          const swipeDirection = (gestureState.dx < 0) ? width * -1.5 : width * 1.5;
-          if (swipeDirection < 0 && !disableLeftSwipe) {
-            this._nextCard('left', swipeDirection, gestureState.dy, this.props.duration);
-          }
-          else if (swipeDirection > 0 && !disableRightSwipe) {
-            this._nextCard('right', swipeDirection, gestureState.dy, this.props.duration);
           }
           else {
             this._resetCard();
