@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { StyleProp, ViewProps, ViewStyle } from 'react-native';
+import {StyleProp, ViewStyle} from 'react-native';
 
 export interface CardStackProps {
   style?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
   secondCardZoom?: number;
   loop?: boolean;
   renderNoMoreCards?: () => React.ReactNode;
@@ -10,6 +11,7 @@ export interface CardStackProps {
   disableBottomSwipe?: boolean;
   disableLeftSwipe?: boolean;
   disableRightSwipe?: boolean;
+  disableArcX?: boolean;
   verticalSwipe?: boolean;
   horizontalSwipe?: boolean;
   verticalThreshold?: boolean;

@@ -379,10 +379,9 @@ class CardStack extends Component {
     return { pointerEvents: topCard === topCardName ? "auto" : "none" }
   }
 
-  render() {
-
-    const { secondCardZoom, renderNoMoreCards } = this.props;
-    const { drag, dragDistance, cardA, cardB, topCard, sindex } = this.state;
+  getCardStyles = (cardName) => {
+    const { secondCardZoom, disableArcX } = this.props;
+    const { drag, dragDistance, topCard } = this.state;
 
     const scale = dragDistance.interpolate({
       inputRange: [ 0, 10, 220],
@@ -395,50 +394,55 @@ class CardStack extends Component {
       extrapolate: 'clamp',
     });
 
+    const transitionStyles = disableArcX ? {
+      transform: [
+        { rotate: (topCard === cardName) ? rotate : '0deg' },
+        { translateY: (topCard === cardName) ? drag.y : 0 },
+        { scale: (topCard === cardName) ? 1 : scale },
+      ],
+      left: (topCard === cardName) ? drag.x : 0,
+    } : {
+      transform: [
+        { rotate: (topCard === cardName) ? rotate : '0deg' },
+        { translateX: (topCard === cardName) ? drag.x : 0 },
+        { translateY: (topCard === cardName) ? drag.y : 0 },
+        { scale: (topCard === cardName) ? 1 : scale },
+      ]
+    };
+
+    return {
+      position: 'absolute',
+      zIndex: (topCard === cardName) ? 3 : 2,
+      ...Platform.select({
+        android: {
+          elevation: (topCard === cardName) ? 3 : 2,
+        }
+      }),
+      ...transitionStyles,
+    }
+  };
+
+  render() {
+
+    const { renderNoMoreCards } = this.props;
+    const { cardA, cardB, topCard } = this.state;
+
     return (
       <View {...this._panResponder.panHandlers} style={[{ position: 'relative' }, this.props.style]}>
+        <View style={this.props.contentStyle}>
+          {renderNoMoreCards()}
 
-        {renderNoMoreCards()}
-
-        <Animated.View
-          {...this._setPointerEvents(topCard, 'cardB')}
-          style={{
-            position: 'absolute',
-            zIndex: (topCard === 'cardB') ? 3 : 2,
-            ...Platform.select({
-              android: {
-                elevation: (topCard === 'cardB') ? 3 : 2,
-              }
-            }),
-            transform: [
-              { rotate: (topCard === 'cardB') ? rotate : '0deg' },
-              { translateX: (topCard === 'cardB') ? drag.x : 0 },
-              { translateY: (topCard === 'cardB') ? drag.y : 0 },
-              { scale: (topCard === 'cardB') ? 1 : scale },
-            ]
-          }}>
-          {cardB}
-        </Animated.View>
-        <Animated.View
-          {...this._setPointerEvents(topCard, 'cardA')}
-          style={{
-            position: 'absolute',
-            zIndex: (topCard === 'cardA') ? 3 : 2,
-            ...Platform.select({
-              android: {
-                elevation: (topCard === 'cardA') ? 3 : 2,
-              }
-            }),
-            transform: [
-              { rotate: (topCard === 'cardA') ? rotate : '0deg' },
-              { translateX: (topCard === 'cardA') ? drag.x : 0 },
-              { translateY: (topCard === 'cardA') ? drag.y : 0 },
-              { scale: (topCard === 'cardA') ? 1 : scale },
-            ]
-          }}>
-          {cardA}
-        </Animated.View>
-
+          <Animated.View
+              {...this._setPointerEvents(topCard, 'cardB')}
+              style={this.getCardStyles('cardB')}>
+            {cardB}
+          </Animated.View>
+          <Animated.View
+              {...this._setPointerEvents(topCard, 'cardA')}
+              style={this.getCardStyles('cardA')}>
+            {cardA}
+          </Animated.View>
+        </View>
       </View>
     );
   }
@@ -459,13 +463,14 @@ CardStack.propTypes = {
   onSwipedRight: PropTypes.func,
   onSwipedTop: PropTypes.func,
   onSwipedBottom: PropTypes.func,
-  onSwiped: PropTypes.func,
   onSwipedAll: PropTypes.func,
 
   disableBottomSwipe: PropTypes.bool,
   disableLeftSwipe: PropTypes.bool,
   disableRightSwipe: PropTypes.bool,
   disableTopSwipe: PropTypes.bool,
+  disableArcX: PropTypes.bool,
+
   verticalSwipe: PropTypes.bool,
   verticalThreshold: PropTypes.number,
 
@@ -478,6 +483,7 @@ CardStack.propTypes = {
 CardStack.defaultProps = {
 
   style: {},
+  contentStyle: {},
   secondCardZoom: 0.95,
   loop: false,
   renderNoMoreCards: () => { return (<Text>No More Cards</Text>) },
@@ -494,6 +500,8 @@ CardStack.defaultProps = {
   disableLeftSwipe: false,
   disableRightSwipe: false,
   disableTopSwipe: false,
+  disableArcX: false,
+
   verticalSwipe: true,
   verticalThreshold: height / 4,
   horizontalSwipe: true,
