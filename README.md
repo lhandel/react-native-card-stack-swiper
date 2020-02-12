@@ -43,8 +43,8 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 | disableRightSwipe   | bool          | disable right swipe             |               | false         |
 | verticalSwipe       | bool          | enable/disable vertical swiping |               | true          |
 | horizontalSwipe     | bool          | enable/disable horizont swiping |               | true          |
-| verticalThreshold   | bool          | vertical swipe threshold        |               | height/4      |
-| horizontalThreshold | bool          | horizontal swipe threshold      |               | width/2       |
+| verticalThreshold   | number        | vertical swipe threshold        |               | height/4      |
+| horizontalThreshold | number        | horizontal swipe threshold      |               | width/2       |
 | outputRotationRange | array         | rotation values for the x values|               | ['-15deg', '0deg', '15deg'] |
 
 
