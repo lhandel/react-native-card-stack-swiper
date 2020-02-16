@@ -127,19 +127,24 @@ class CardStack extends Component {
     if (typeof this.props.children === 'undefined') return;
     if (!this._isSameChildren(this.props.children, prevProps.children)) {
       const children = Array.isArray(this.props.children) ? this.props.children : [this.props.children];
-      let aIndex = (this.state.topCard == 'cardA') ? 
-          this.mod(this.state.sindex - 2, children.length) : 
-          this.mod(this.state.sindex - 1, children.length);
-      let bIndex = (this.state.topCard == 'cardB') ? 
-          this.mod(this.state.sindex - 2, children.length) : 
-          this.mod(this.state.sindex - 1, children.length);
-  
+      let aIndex = (this.state.topCard == 'cardA') ?
+        this._getIndex(this.state.sindex - 2, children.length) :
+        this._getIndex(this.state.sindex - 1, children.length);
+      let bIndex = (this.state.topCard == 'cardB') ?
+        this._getIndex(this.state.sindex - 2, children.length) :
+        this._getIndex(this.state.sindex - 1, children.length);
       this.setState({
         cards: children,
-        cardA: this.props.children[aIndex] || null,
-        cardB: this.props.children[bIndex] || null
+        cardA: children[aIndex] || null,
+        cardB: children[bIndex] || null
       });
     }
+  }
+
+  _getIndex(index, cards){
+    return this.props.loop ? 
+      this.mod(index, cards):
+      index;
   }
 
   componentDidMount() {
@@ -149,10 +154,15 @@ class CardStack extends Component {
   _isSameChildren(a, b) {
     if (typeof a != typeof b) return false;
     if (typeof a === 'undefined') return false;
-    if (a.length != b.length) return false;
-    for (let i in a) {
-      if (a[i].key != b[i].key) { return false }
+    if (Array.isArray(a) && Array.isArray(b)) {
+      if (a.length != b.length) return false;
+      for (let i in a) {
+        if (a[i].key != b[i].key) { return false }
+      }
+      return true;
     }
+    if (a.key !== b.key) return false;
+
     return true
   }
 
@@ -162,8 +172,8 @@ class CardStack extends Component {
     const cards = Array.isArray(children) ? children : [children];
     const initialIndexA = this.props.initialIndex < cards.length ? this.props.initialIndex : 0;
     const initialIndexB = loop ? this.mod(initialIndexA + 1, cards.length) : initialIndexA + 1;
-    const cardA =  children[initialIndexA] || null;
-    const cardB =  children[initialIndexB] || null;
+    const cardA = cards[initialIndexA] || null;
+    const cardB = cards[initialIndexB] || null;
     this.setState({
       cards,
       cardA,
@@ -348,22 +358,22 @@ class CardStack extends Component {
         switch (direction) {
           case 'left':
             this.props.onSwipedLeft(index);
-            if (this.state.cards[index].props.onSwipedLeft)
-              this.state.cards[index].props.onSwipedLeft();
+            if (this.state.cards[index] && this.state.cards[index].props.onSwipedLeft)
+              this.state.cards[index] && this.state.cards[index].props.onSwipedLeft();
             break;
           case 'right':
             this.props.onSwipedRight(index);
-            if (this.state.cards[index].props.onSwipedRight)
+            if (this.state.cards[index] && this.state.cards[index].props.onSwipedRight)
               this.state.cards[index].props.onSwipedRight();
             break;
           case 'top':
             this.props.onSwipedTop(index);
-            if (this.state.cards[index].props.onSwipedTop)
+            if (this.state.cards[index] && this.state.cards[index].props.onSwipedTop)
               this.state.cards[index].props.onSwipedTop();
             break;
           case 'bottom':
             this.props.onSwipedBottom(index);
-            if (this.state.cards[index].props.onSwipedBottom)
+            if (this.state.cards[index] && this.state.cards[index].props.onSwipedBottom)
               this.state.cards[index].props.onSwipedBottom();
             break;
           default:
