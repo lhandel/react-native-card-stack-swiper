@@ -33,6 +33,7 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 | Props               | type          | description                     | required      | default       |
 | --------------------| ------------- | --------------------------------| ------------- | ------------- |
 | style               | object        | container style                 |               | {}            |
+| cardContainerStyle  | object        | cardContainerStyle style        |               | {}            |
 | secondCardZoom      | number        | second card zoom                |               | 0.95          |
 | duration            | number        | animation duration              |               | 300           |
 | loop                | bool          | keep swiping indefinitely       |               | false         |

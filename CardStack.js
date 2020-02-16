@@ -428,14 +428,14 @@ class CardStack extends Component {
               android: {
                 elevation: (topCard === 'cardA') ? 3 : 2,
               }
-            , this.props.cardContainerStyle]}),
+            }),
             transform: [
               { rotate: (topCard === 'cardA') ? rotate : '0deg' },
               { translateX: (topCard === 'cardA') ? drag.x : 0 },
               { translateY: (topCard === 'cardA') ? drag.y : 0 },
               { scale: (topCard === 'cardA') ? 1 : scale },
             ]
-          }}>
+          }, this.props.cardContainerStyle]}>
           {cardA}
         </Animated.View>
 
