@@ -1,6 +1,6 @@
 {
   "name": "react-native-card-stack-swiper",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Tinder like react-native card stack swiper",
   "main": "index.js",
   "scripts": {

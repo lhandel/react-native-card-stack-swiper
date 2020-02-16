@@ -70,7 +70,7 @@ class CardStack extends Component {
         this.props.onSwipeEnd();
         const currentTime = new Date().getTime();
         const swipeDuration = currentTime - this.state.touchStart;
-        const { 
+        const {
           verticalThreshold,
           horizontalThreshold,
           disableTopSwipe,
@@ -122,28 +122,34 @@ class CardStack extends Component {
       },
     });
   }
-  
+
   componentDidUpdate(prevProps) {
+    if (typeof this.props.children === 'undefined') return;
     if (!this._isSameChildren(this.props.children, prevProps.children)) {
-      let aIndex = (this.state.topCard == 'cardA') ? this.mod(this.state.sindex - 2, this.props.children.length) : this.mod(this.state.sindex - 1, this.props.children.length);
-      let bIndex = (this.state.topCard == 'cardB') ? this.mod(this.state.sindex - 2, this.props.children.length) : this.mod(this.state.sindex - 1, this.props.children.length);
+      const children = Array.isArray(this.props.children) ? this.props.children : [this.props.children];
+      let aIndex = (this.state.topCard == 'cardA') ? 
+          this.mod(this.state.sindex - 2, children.length) : 
+          this.mod(this.state.sindex - 1, children.length);
+      let bIndex = (this.state.topCard == 'cardB') ? 
+          this.mod(this.state.sindex - 2, children.length) : 
+          this.mod(this.state.sindex - 1, children.length);
+  
       this.setState({
-        cards: this.props.children,
-        cardA: this.props.children[aIndex],
-        cardB: this.props.children[bIndex]
+        cards: children,
+        cardA: this.props.children[aIndex] || null,
+        cardB: this.props.children[bIndex] || null
       });
     }
   }
-  
+
   componentDidMount() {
     this.initDeck();
   }
 
   _isSameChildren(a, b) {
-    if (typeof a !=typeof b) return false;
+    if (typeof a != typeof b) return false;
     if (typeof a === 'undefined') return false;
     if (a.length != b.length) return false;
-
     for (let i in a) {
       if (a[i].key != b[i].key) { return false }
     }
@@ -151,22 +157,19 @@ class CardStack extends Component {
   }
 
   initDeck() {
-    // check if we only have 1 child
-    if (typeof this.props.children !== 'undefined' && !Array.isArray(this.props.children)) {
-      this.setState({
-        cards: [this.props.children],
-        cardA: this.props.children,
-        cardB: null,
-        sindex: 2,
-      });
-    } else if (Array.isArray(this.props.children)) {
-      this.setState({
-        cards: this.props.children,
-        cardA: this.props.children[0],
-        cardB: this.props.children[1],
-        sindex: 2,
-      });
-    }
+    if (typeof this.props.children === 'undefined') return;
+    const { children, loop } = this.props;
+    const cards = Array.isArray(children) ? children : [children];
+    const initialIndexA = this.props.initialIndex < cards.length ? this.props.initialIndex : 0;
+    const initialIndexB = loop ? this.mod(initialIndexA + 1, cards.length) : initialIndexA + 1;
+    const cardA =  children[initialIndexA] || null;
+    const cardB =  children[initialIndexB] || null;
+    this.setState({
+      cards,
+      cardA,
+      cardB,
+      sindex: initialIndexB + 1,
+    });
   }
 
   _resetCard() {
@@ -385,7 +388,7 @@ class CardStack extends Component {
     const { drag, dragDistance, cardA, cardB, topCard, sindex } = this.state;
 
     const scale = dragDistance.interpolate({
-      inputRange: [ 0, 10, 220],
+      inputRange: [0, 10, 220],
       outputRange: [secondCardZoom, secondCardZoom, 1],
       extrapolate: 'clamp',
     });
@@ -452,6 +455,7 @@ CardStack.propTypes = {
   cardContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
   secondCardZoom: PropTypes.number,
   loop: PropTypes.bool,
+  initialIndex: PropTypes.number,
   renderNoMoreCards: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
   onSwipeStart: PropTypes.func,
   onSwipeEnd: PropTypes.func,
@@ -483,6 +487,7 @@ CardStack.defaultProps = {
   cardContainerStyle: {},
   secondCardZoom: 0.95,
   loop: false,
+  initialIndex: 0,
   renderNoMoreCards: () => { return (<Text>No More Cards</Text>) },
   onSwipeStart: () => null,
   onSwipeEnd: () => null,
@@ -492,7 +497,7 @@ CardStack.defaultProps = {
   onSwipedTop: () => { },
   onSwipedBottom: () => { },
   onSwipedAll: async () => { },
-  onSwipe: () => {},
+  onSwipe: () => { },
 
   disableBottomSwipe: false,
   disableLeftSwipe: false,
