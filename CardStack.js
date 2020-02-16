@@ -402,7 +402,7 @@ class CardStack extends Component {
 
         <Animated.View
           {...this._setPointerEvents(topCard, 'cardB')}
-          style={{
+          style={[{
             position: 'absolute',
             zIndex: (topCard === 'cardB') ? 3 : 2,
             ...Platform.select({
@@ -416,19 +416,19 @@ class CardStack extends Component {
               { translateY: (topCard === 'cardB') ? drag.y : 0 },
               { scale: (topCard === 'cardB') ? 1 : scale },
             ]
-          }}>
+          }, this.props.cardContainerStyle]}>
           {cardB}
         </Animated.View>
         <Animated.View
           {...this._setPointerEvents(topCard, 'cardA')}
-          style={{
+          style={[{
             position: 'absolute',
             zIndex: (topCard === 'cardA') ? 3 : 2,
             ...Platform.select({
               android: {
                 elevation: (topCard === 'cardA') ? 3 : 2,
               }
-            }),
+            , this.props.cardContainerStyle]}),
             transform: [
               { rotate: (topCard === 'cardA') ? rotate : '0deg' },
               { translateX: (topCard === 'cardA') ? drag.x : 0 },
@@ -449,6 +449,7 @@ CardStack.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 
   style: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
+  cardContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
   secondCardZoom: PropTypes.number,
   loop: PropTypes.bool,
   renderNoMoreCards: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
@@ -478,6 +479,7 @@ CardStack.propTypes = {
 CardStack.defaultProps = {
 
   style: {},
+  cardContainerStyle: {},
   secondCardZoom: 0.95,
   loop: false,
   renderNoMoreCards: () => { return (<Text>No More Cards</Text>) },
