@@ -12,8 +12,8 @@ export interface CardStackProps {
   disableRightSwipe?: boolean;
   verticalSwipe?: boolean;
   horizontalSwipe?: boolean;
-  verticalThreshold?: boolean;
-  horizontalThreshold?: boolean;
+  verticalThreshold?: number;
+  horizontalThreshold?: number;
   outputRotationRange?: [string, string, string]
   onSwipeStart?: (index: number) => void;
   onSwipeEnd?: (index: number) => void; 
