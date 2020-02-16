@@ -15,10 +15,7 @@ const { height, width } = Dimensions.get('window');
 class CardStack extends Component {
 
   static distance(x, y) {
-    const a = Math.abs(x);
-    const b = Math.abs(y);
-    const c = Math.sqrt((a * a) + (b * b));
-    return c;
+    return Math.hypot(x, y);
   }
 
   constructor(props) {
@@ -465,6 +462,7 @@ CardStack.propTypes = {
   onSwipedBottom: PropTypes.func,
   onSwiped: PropTypes.func,
   onSwipedAll: PropTypes.func,
+  onSwipe: PropTypes.func,
 
   disableBottomSwipe: PropTypes.bool,
   disableLeftSwipe: PropTypes.bool,
@@ -494,6 +492,7 @@ CardStack.defaultProps = {
   onSwipedTop: () => { },
   onSwipedBottom: () => { },
   onSwipedAll: async () => { },
+  onSwipe: () => {},
 
   disableBottomSwipe: false,
   disableLeftSwipe: false,

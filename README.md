@@ -1,8 +1,9 @@
 # react-native-card-stack-swiper
 Tinder like react-native card stack swiper
 
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/react-native-card-stack-swiper/issues)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/lhandel/react-native-card-stack-swiper/issues)
 [![npm version](https://badge.fury.io/js/react-native-card-stack-swiper.svg)](https://badge.fury.io/js/react-native-card-stack-swiper)
+[![npm downloads](https://img.shields.io/npm/dt/react-native-card-stack-swiper.svg)](https://badge.fury.io/js/react-native-card-stack-swiper)
 
 ## Installation
 
@@ -52,14 +53,16 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 ## CardStack events
 | Props             | type          | description                 |
 | ----------------- | ------------- | --------------------------- |
-| onSwipeStart    | func           | function to be called when a card swipe starts |
-| onSwipeEnd    | func           | function to be called when a card swipe ends (card is released) |
+| onSwipeStart      | func           | function to be called when a card swipe starts |
+| onSwipeEnd        | func           | function to be called when a card swipe ends (card is released) |
 | onSwiped          | func           | function to be called when a card is swiped. it receives the swiped card index   |
 | onSwipedLeft      | func           | function to be called when a card is swiped left. it receives the swiped card index   |
 | onSwipedRight     | func           | function to be called when a card is swiped right. it receives the swiped card index   |
 | onSwipedTop       | func           | function to be called when a card is swiped top. it receives the swiped card index  |
 | onSwipedBottom    | func           | function to be called when a card is swiped bottom. it receives the swiped card index |
-| onSwipedAll    | async func     | function to be called when the last card is swiped. Could trig action to refresh cards |
+| onSwipedAll       | async func     | function to be called when the last card is swiped. Could trig action to refresh cards |
+| onSwipe           | func           | function to be called when a card is swiped. It receives the current x, and y coordinates|
+
 
 
 ## CardStack actions
