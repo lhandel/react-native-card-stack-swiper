@@ -16,7 +16,8 @@ export interface CardStackProps {
   horizontalThreshold?: number;
   outputRotationRange?: [string, string, string]
   onSwipeStart?: (index: number) => void;
-  onSwipeEnd?: (index: number) => void; 
+  onSwipeEnd?: (index: number) => void;
+  onSwipeCancel?: () => void; 
   onSwiped?: (index: number) => void;
   onSwipedLeft?: (index: number) => void;
   onSwipedRight?: (index: number) => void;

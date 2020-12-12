@@ -92,6 +92,7 @@ class CardStack extends Component {
             this._nextCard('right', swipeDirection, gestureState.dy, this.props.duration);
           }
           else {
+            this.props.onSwipeCancel()
             this._resetCard();
           }
         } else if (((Math.abs(gestureState.dy) > verticalThreshold) ||
@@ -108,10 +109,12 @@ class CardStack extends Component {
             this._nextCard('bottom', gestureState.dx, swipeDirection, this.props.duration);
           }
           else {
+            this.props.onSwipeCancel()
             this._resetCard();
           }
         }
         else {
+          this.props.onSwipeCancel()
           this._resetCard();
         }
       },
@@ -142,7 +145,7 @@ class CardStack extends Component {
   }
 
   _getIndex(index, cards){
-    return this.props.loop ? 
+    return this.props.loop ?
       this.mod(index, cards):
       index;
   }
@@ -475,6 +478,7 @@ CardStack.propTypes = {
   renderNoMoreCards: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
   onSwipeStart: PropTypes.func,
   onSwipeEnd: PropTypes.func,
+  onSwipeCancel: PropTypes.func,
   onSwiped: PropTypes.func,
   onSwipedLeft: PropTypes.func,
   onSwipedRight: PropTypes.func,
@@ -507,6 +511,7 @@ CardStack.defaultProps = {
   renderNoMoreCards: () => { return (<Text>No More Cards</Text>) },
   onSwipeStart: () => null,
   onSwipeEnd: () => null,
+  onSwipeCancel: () => null,
   onSwiped: () => { },
   onSwipedLeft: () => { },
   onSwipedRight: () => { },
