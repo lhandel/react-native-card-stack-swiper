@@ -10,6 +10,7 @@ export interface CardStackProps {
   disableBottomSwipe?: boolean;
   disableLeftSwipe?: boolean;
   disableRightSwipe?: boolean;
+  disableMultitouchSwipe?: boolean;
   verticalSwipe?: boolean;
   horizontalSwipe?: boolean;
   verticalThreshold?: number;

@@ -35,6 +35,10 @@ class CardStack extends Component {
       onStartShouldSetPanResponder: (evt, gestureState) => false,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
       onMoveShouldSetPanResponder: (evt, gestureState) => {
+        if (this.props.disableMultitouchSwipe && gestureState.numberActiveTouches > 1) {
+          return false;
+        }
+
         const isVerticalSwipe = Math.sqrt(
           Math.pow(gestureState.dx, 2) < Math.pow(gestureState.dy, 2)
         )
@@ -44,6 +48,10 @@ class CardStack extends Component {
         return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > 10
       },
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+        if (this.props.disableMultitouchSwipe && gestureState.numberActiveTouches > 1) {
+          return false;
+        }
+
         const isVerticalSwipe = Math.sqrt(
           Math.pow(gestureState.dx, 2) < Math.pow(gestureState.dy, 2)
         )
@@ -488,6 +496,7 @@ CardStack.propTypes = {
   disableLeftSwipe: PropTypes.bool,
   disableRightSwipe: PropTypes.bool,
   disableTopSwipe: PropTypes.bool,
+  disableMultitouchSwipe: PropTypes.bool,
   verticalSwipe: PropTypes.bool,
   verticalThreshold: PropTypes.number,
 
@@ -519,6 +528,7 @@ CardStack.defaultProps = {
   disableLeftSwipe: false,
   disableRightSwipe: false,
   disableTopSwipe: false,
+  disableMultitouchSwipe: false,
   verticalSwipe: true,
   verticalThreshold: height / 4,
   horizontalSwipe: true,
