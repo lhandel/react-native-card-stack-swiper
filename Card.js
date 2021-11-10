@@ -7,9 +7,11 @@ import {
 const Card = ({ style, children, isScrollable, ...props }) => {
 	if (isScrollable) {
 		return (
-			<ScrollView style={style} {...props}>
-				{children}
-			</ScrollView>
+			<View style={style}>
+				<ScrollView {...props}>
+					{children}
+				</ScrollView>
+			</View>
 		);
 	}
 	return (
