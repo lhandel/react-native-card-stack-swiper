@@ -161,7 +161,8 @@ class CardStack extends Component {
       }
       return true;
     }
-    if (a.key !== b.key) return false;
+    if(a !== null)
+      if (a.key !== b.key) return false;
 
     return true
   }
