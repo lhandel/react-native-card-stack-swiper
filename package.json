@@ -26,7 +26,7 @@
   "license": "MIT",
   "peerDependencies": {
     "react": "^17.0.0",
-    "react-native": "^0.49.1"
+    "react-native": "^0.64.0"
   },
   "bugs": {
     "url": "https://github.com/lhandel/react-native-card-stack-swiper/issues"
