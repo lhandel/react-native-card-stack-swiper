@@ -424,11 +424,11 @@ class CardStack extends Component {
           style={[{
             position: 'absolute',
             zIndex: (topCard === 'cardB') ? 3 : 2,
-            ...Platform.select({
-              android: {
-                elevation: (topCard === 'cardB') ? 3 : 2,
-              }
-            }),
+            // ...Platform.select({
+            //   android: {
+            //     elevation: (topCard === 'cardB') ? 3 : 2,
+            //   }
+            // }),
             transform: [
               { rotate: (topCard === 'cardB') ? rotate : '0deg' },
               { translateX: (topCard === 'cardB') ? drag.x : 0 },
@@ -443,11 +443,11 @@ class CardStack extends Component {
           style={[{
             position: 'absolute',
             zIndex: (topCard === 'cardA') ? 3 : 2,
-            ...Platform.select({
-              android: {
-                elevation: (topCard === 'cardA') ? 3 : 2,
-              }
-            }),
+            // ...Platform.select({
+            //   android: {
+            //     elevation: (topCard === 'cardA') ? 3 : 2,
+            //   }
+            // }),
             transform: [
               { rotate: (topCard === 'cardA') ? rotate : '0deg' },
               { translateX: (topCard === 'cardA') ? drag.x : 0 },
